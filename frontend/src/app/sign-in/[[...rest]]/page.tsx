@@ -11,6 +11,13 @@ export default function SignInPage() {
   const searchParams = useSearchParams();
 
   if (isLocalAuthMode()) {
+    // When running behind a reverse proxy that injects Authorization for /api/*,
+    // users should not see the local token input page.
+    const proxyAuthEnabled = process.env.NEXT_PUBLIC_PROXY_AUTH === "true";
+    if (proxyAuthEnabled) {
+      return null;
+    }
+
     return <LocalAuthLogin />;
   }
 
