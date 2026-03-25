@@ -19,6 +19,8 @@ import { isLikelyValidClerkPublishableKey } from "@/auth/clerkKey";
 import { getLocalAuthToken, isLocalAuthMode } from "@/auth/localAuth";
 
 function hasLocalAuthToken(): boolean {
+  const proxyAuthEnabled = process.env.NEXT_PUBLIC_PROXY_AUTH === "true";
+  if (proxyAuthEnabled) return true;
   return Boolean(getLocalAuthToken());
 }
 
@@ -76,7 +78,8 @@ export function useUser() {
 
 export function useAuth() {
   if (isLocalAuthMode()) {
-    const token = getLocalAuthToken();
+    const proxyAuthEnabled = process.env.NEXT_PUBLIC_PROXY_AUTH === "true";
+    const token = proxyAuthEnabled ? "__proxy_auth__" : getLocalAuthToken();
     return {
       isLoaded: true,
       isSignedIn: Boolean(token),
