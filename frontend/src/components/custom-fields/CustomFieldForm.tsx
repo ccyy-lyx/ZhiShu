@@ -97,12 +97,12 @@ export function CustomFieldForm({
     >
       <div>
         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Basic configuration
+          基础配置
         </p>
         <div className="mt-4 grid gap-6 md:grid-cols-2">
           <label className="space-y-1">
             <span className="text-sm font-semibold text-slate-900">
-              Field key
+              字段键
             </span>
             <Input
               value={formState.fieldKey}
@@ -112,26 +112,26 @@ export function CustomFieldForm({
                   fieldKey: event.target.value,
                 }))
               }
-              placeholder="e.g. client_name"
+              placeholder="例如：client_name"
               readOnly={mode === "edit"}
               disabled={isSubmitting || mode === "edit"}
               required={mode === "create"}
             />
             {mode === "edit" ? (
               <span className="text-xs text-slate-500">
-                Field key cannot be changed after creation.
+                字段键在创建后不可更改。
               </span>
             ) : null}
           </label>
 
           <label className="space-y-1">
-            <span className="text-sm font-semibold text-slate-900">Label</span>
+            <span className="text-sm font-semibold text-slate-900">标签</span>
             <Input
               value={formState.label}
               onChange={(event) =>
                 setFormState((prev) => ({ ...prev, label: event.target.value }))
               }
-              placeholder="e.g. Client name"
+              placeholder="例如：客户名称"
               disabled={isSubmitting}
               required
             />
@@ -139,7 +139,7 @@ export function CustomFieldForm({
 
           <label className="space-y-1">
             <span className="text-sm font-semibold text-slate-900">
-              Field type
+              字段类型
             </span>
             <Select
               value={formState.fieldType}
@@ -152,7 +152,7 @@ export function CustomFieldForm({
               disabled={isSubmitting}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select field type" />
+                <SelectValue placeholder="选择字段类型" />
               </SelectTrigger>
               <SelectContent>
                 {CUSTOM_FIELD_TYPE_OPTIONS.map((option) => (
@@ -166,7 +166,7 @@ export function CustomFieldForm({
 
           <label className="space-y-1">
             <span className="text-sm font-semibold text-slate-900">
-              UI visible
+              界面可见性
             </span>
             <Select
               value={formState.uiVisibility}
@@ -179,7 +179,7 @@ export function CustomFieldForm({
               disabled={isSubmitting}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select visibility" />
+                <SelectValue placeholder="选择可见性" />
               </SelectTrigger>
               <SelectContent>
                 {CUSTOM_FIELD_VISIBILITY_OPTIONS.map((option) => (
@@ -210,12 +210,12 @@ export function CustomFieldForm({
 
       <div>
         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Validation and defaults
+          校验与默认值
         </p>
         <div className="mt-4 space-y-4">
           <label className="space-y-1">
             <span className="text-sm font-semibold text-slate-900">
-              Validation regex
+              校验正则
             </span>
             <Input
               value={formState.validationRegex}
@@ -225,20 +225,20 @@ export function CustomFieldForm({
                   validationRegex: event.target.value,
                 }))
               }
-              placeholder="Optional. Example: ^[A-Z]{3}$"
+              placeholder="可选，例如：^[A-Z]{3}$"
               disabled={
                 isSubmitting ||
                 !STRING_VALIDATION_FIELD_TYPES.has(formState.fieldType)
               }
             />
             <p className="text-xs text-slate-500">
-              Supported for text/date/date-time/url fields.
+              支持 text/date/date-time/url 字段类型。
             </p>
           </label>
 
           <label className="space-y-1">
             <span className="text-sm font-semibold text-slate-900">
-              Default value
+              默认值
             </span>
             <Textarea
               value={formState.defaultValue}
@@ -249,14 +249,14 @@ export function CustomFieldForm({
                 }))
               }
               rows={3}
-              placeholder='Optional default value. For booleans use "true"/"false"; for JSON use an object or array.'
+              placeholder='可选默认值。布尔值请使用 "true"/"false"；JSON 请使用对象或数组。'
               disabled={isSubmitting}
             />
           </label>
 
           <label className="space-y-1">
             <span className="text-sm font-semibold text-slate-900">
-              Description
+              描述
             </span>
             <Textarea
               value={formState.description}
@@ -267,7 +267,7 @@ export function CustomFieldForm({
                 }))
               }
               rows={3}
-              placeholder="Optional description used by agents and UI"
+              placeholder="用于 Agent 与界面的可选描述"
               disabled={isSubmitting}
             />
           </label>
@@ -277,23 +277,23 @@ export function CustomFieldForm({
       <div>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Board bindings
+            适用看板
           </p>
           <span className="text-xs text-slate-500">
-            {selectedBoardIds.size} selected
+            已选择 {selectedBoardIds.size} 个
           </span>
         </div>
         <div className="mt-4 space-y-2">
           <Input
             value={boardSearch}
             onChange={(event) => setBoardSearch(event.target.value)}
-            placeholder="Search boards..."
+            placeholder="搜索看板..."
             disabled={isSubmitting}
           />
           <div className="max-h-64 overflow-auto rounded-xl border border-slate-200 bg-slate-50/40">
             {boardsLoading ? (
               <div className="px-4 py-6 text-sm text-slate-500">
-                Loading boards…
+                正在加载看板…
               </div>
             ) : boardsError ? (
               <div className="px-4 py-6 text-sm text-rose-700">
@@ -301,7 +301,7 @@ export function CustomFieldForm({
               </div>
             ) : filteredBoards.length === 0 ? (
               <div className="px-4 py-6 text-sm text-slate-500">
-                No boards found.
+                未找到看板。
               </div>
             ) : (
               <ul className="divide-y divide-slate-200">
@@ -343,7 +343,7 @@ export function CustomFieldForm({
             )}
           </div>
           <p className="text-xs text-slate-500">
-            Required. The custom field appears on tasks in selected boards.
+            必填。自定义字段会显示在已选看板的任务中。
           </p>
         </div>
       </div>
@@ -357,7 +357,7 @@ export function CustomFieldForm({
           className={buttonVariants({ variant: "outline" })}
           aria-disabled={isSubmitting}
         >
-          Cancel
+          取消
         </Link>
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? submittingLabel : submitLabel}
