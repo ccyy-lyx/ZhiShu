@@ -11,6 +11,10 @@ node_modules/
 .env
 .env.local
 
+# Local run artifacts (dev)
+.run-*.log
+.run-*.pid
+
 # IDE
 .idea/
 .runlogs/

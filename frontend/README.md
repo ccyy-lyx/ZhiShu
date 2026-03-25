@@ -2,7 +2,7 @@
 
 This package is the **Next.js** web UI for OpenClaw Mission Control.
 
-- Talks to the Mission Control **backend** over HTTP (typically `http://localhost:8000`).
+- Talks to the Mission Control **backend** over HTTP (typically `http://localhost:38000`).
 - Uses **React Query** for data fetching.
 - Supports two auth modes:
   - **local** shared bearer token mode (self-host default)
@@ -26,7 +26,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:33000.
 
 ### LAN development
 
@@ -90,13 +90,13 @@ We generate a typed client from the backend OpenAPI schema using **Orval**:
 By default, Orval reads:
 
 - `ORVAL_INPUT` (if set), otherwise
-- `http://127.0.0.1:8000/openapi.json`
+- `http://127.0.0.1:38000/openapi.json`
 
 Example:
 
 ```bash
 # from frontend/
-ORVAL_INPUT=http://localhost:8000/openapi.json npm run api:gen
+ORVAL_INPUT=http://localhost:38000/openapi.json npm run api:gen
 ```
 
 ### Auth header / Clerk token injection
@@ -155,7 +155,7 @@ cp .env.example .env.local
 
 ### Frontend loads, but API calls fail (CORS / network errors)
 
-- Confirm backend is up: http://localhost:8000/healthz
+- Confirm backend is up: http://localhost:38000/healthz
 - Confirm `NEXT_PUBLIC_API_URL` points to the correct host/port.
 - If accessing from another device (LAN), use a reachable backend URL (not `localhost`).
 
@@ -173,6 +173,6 @@ If you see repeated proxy errors (often `ECONNRESET`), make sure your dev server
 
 Notes:
 
-- Local dev should work via `http://localhost:3000` and `http://127.0.0.1:3000`.
+- Local dev should work via `http://localhost:33000` and `http://127.0.0.1:33000`.
 - LAN dev should work via the configured LAN IP (e.g. `http://192.168.1.101:3000`) **only** if you bind the dev server to all interfaces (`npm run dev:lan`).
 - If you bind Next to `127.0.0.1` only, remote LAN clients won’t connect.

@@ -2,7 +2,7 @@
 
 This directory contains the **Mission Control backend API** (FastAPI + SQLModel) and its database migrations (Alembic).
 
-- Default API base URL: http://localhost:8000
+- Default API base URL: http://localhost:38000
 - Health endpoints: `/healthz`, `/readyz`
 - API routes: `/api/v1/*`
 
@@ -26,13 +26,13 @@ cd backend
 cp .env.example .env
 
 uv sync --extra dev
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 38000
 ```
 
 Verify:
 
 ```bash
-curl -f http://localhost:8000/healthz
+curl -f http://localhost:38000/healthz
 ```
 
 ## Configuration / environment variables
@@ -56,7 +56,7 @@ A starter file exists at `backend/.env.example`.
   - Recommended local/dev default (matches `backend/.env.example`):
     `postgresql+psycopg://postgres:postgres@localhost:5432/mission_control`
 - `CORS_ORIGINS` (comma-separated)
-  - Example: `http://localhost:3000`
+  - Example: `http://localhost:33000`
 - `BASE_URL` (required for gateway provisioning/agent heartbeat templates; no fallback)
 
 ### Database lifecycle
@@ -165,7 +165,7 @@ uv run python scripts/export_openapi.py
 
 ### CORS issues from the frontend
 
-- Set `CORS_ORIGINS=http://localhost:3000` (or a comma-separated list) in `backend/.env`.
+- Set `CORS_ORIGINS=http://localhost:33000` (or a comma-separated list) in `backend/.env`.
 - Restart the backend after changing env vars.
 
 ### Alembic / migrations not applying

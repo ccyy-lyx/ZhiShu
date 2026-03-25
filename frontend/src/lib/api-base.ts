@@ -12,7 +12,7 @@ export function getApiBaseUrl(): string {
     const protocol = window.location.protocol === "https:" ? "https" : "http";
     const host = window.location.hostname;
     if (host) {
-      return `${protocol}://${host}:8000`;
+      return `${protocol}://${host}:38000`;
     }
   }
 
