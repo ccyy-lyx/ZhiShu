@@ -26,26 +26,26 @@ export default function NewTagPage() {
   return (
     <DashboardPageLayout
       signedOut={{
-        message: "Sign in to create tags.",
+        message: "登录后可创建标签。",
         forceRedirectUrl: "/tags/add",
         signUpForceRedirectUrl: "/tags/add",
       }}
-      title="Create tag"
-      description="Define a reusable tag for task grouping."
+      title="创建标签"
+      description="定义一个可复用的标签用于任务分组。"
       isAdmin={isAdmin}
-      adminOnlyMessage="Only organization owners and admins can manage tags."
+      adminOnlyMessage="仅组织所有者和管理员可以管理标签。"
     >
       <TagForm
         isSubmitting={createMutation.isPending}
-        submitLabel="Create tag"
-        submittingLabel="Creating…"
+        submitLabel="创建标签"
+        submittingLabel="创建中…"
         onCancel={() => router.push("/tags")}
         onSubmit={async (values) => {
           const result = await createMutation.mutateAsync({
             data: values,
           });
           if (result.status !== 200) {
-            throw new Error("Unable to create tag.");
+            throw new Error("无法创建标签。" );
           }
           router.push("/tags");
         }}

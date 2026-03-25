@@ -63,14 +63,14 @@ export const parseCustomFieldDefaultValue = (
 
   if (fieldType === "integer") {
     if (!/^-?\d+$/.test(trimmed)) {
-      return { value: null, error: "Default value must be a valid integer." };
+      return { value: null, error: "默认值必须是有效整数。" };
     }
     return { value: Number.parseInt(trimmed, 10), error: null };
   }
 
   if (fieldType === "decimal") {
     if (!/^-?\d+(\.\d+)?$/.test(trimmed)) {
-      return { value: null, error: "Default value must be a valid decimal." };
+      return { value: null, error: "默认值必须是有效小数。" };
     }
     return { value: Number.parseFloat(trimmed), error: null };
   }
@@ -78,7 +78,7 @@ export const parseCustomFieldDefaultValue = (
   if (fieldType === "boolean") {
     if (trimmed.toLowerCase() === "true") return { value: true, error: null };
     if (trimmed.toLowerCase() === "false") return { value: false, error: null };
-    return { value: null, error: "Default value must be true or false." };
+    return { value: null, error: "默认值必须为 true 或 false。" };
   }
 
   if (
@@ -95,14 +95,14 @@ export const parseCustomFieldDefaultValue = (
       if (parsed === null || typeof parsed !== "object") {
         return {
           value: null,
-          error: "Default value must be valid JSON (object or array).",
+          error: "默认值必须是有效 JSON（对象或数组）。",
         };
       }
       return { value: parsed, error: null };
     } catch {
       return {
         value: null,
-        error: "Default value must be valid JSON (object or array).",
+        error: "默认值必须是有效 JSON（对象或数组）。",
       };
     }
   }
@@ -153,11 +153,11 @@ export const normalizeCustomFieldFormInput = ({
   const boardIds = Array.from(selectedBoardIds);
 
   if (mode === "create" && !trimmedFieldKey) {
-    return { value: null, error: "Field key is required." };
+    return { value: null, error: "字段键不能为空。" };
   }
-  if (!trimmedLabel) return { value: null, error: "Label is required." };
+  if (!trimmedLabel) return { value: null, error: "标签不能为空。" };
   if (boardIds.length === 0) {
-    return { value: null, error: "Select at least one board." };
+    return { value: null, error: "请至少选择一个看板。" };
   }
   if (
     trimmedValidationRegex &&
@@ -165,7 +165,7 @@ export const normalizeCustomFieldFormInput = ({
   ) {
     return {
       value: null,
-      error: "Validation regex is only supported for string field types.",
+      error: "校验正则仅支持字符串类型字段。",
     };
   }
 

@@ -78,10 +78,10 @@ describe("DataTable", () => {
       />,
     );
 
-    const editLink = screen.getByRole("link", { name: "Edit" });
+    const editLink = screen.getByRole("link", { name: "编辑" });
     expect(editLink).toHaveAttribute("href", "/items/row-1/edit");
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "删除" }));
     expect(onDelete).toHaveBeenCalledWith(row);
   });
 
@@ -117,10 +117,10 @@ describe("DataTable", () => {
     );
     expect(screen.getByRole("button", { name: "Archive" })).toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: "Edit" }),
+      screen.queryByRole("link", { name: "编辑" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "Delete" }),
+      screen.queryByRole("button", { name: "删除" }),
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Archive" }));
@@ -131,7 +131,7 @@ describe("DataTable", () => {
     const { rerender } = render(
       <DataTableHarness rows={[]} isLoading={true} />,
     );
-    expect(screen.getByText("Loading…")).toBeInTheDocument();
+    expect(screen.getByText("加载中…")).toBeInTheDocument();
 
     rerender(
       <DataTableHarness

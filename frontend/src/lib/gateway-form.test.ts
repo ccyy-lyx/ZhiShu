@@ -56,53 +56,53 @@ describe("validateGatewayUrl", () => {
   });
 
   it("rejects empty string", () => {
-    expect(validateGatewayUrl("")).toBe("Gateway URL is required.");
+    expect(validateGatewayUrl("")).toBe("请填写网关 URL。");
   });
 
   it("rejects wss:// with no port at all", () => {
     expect(validateGatewayUrl("wss://gateway.example.com")).toBe(
-      "Gateway URL must include an explicit port.",
+      "网关 URL 必须包含明确端口。",
     );
   });
 
   it("rejects ws:// with no port at all", () => {
     expect(validateGatewayUrl("ws://localhost")).toBe(
-      "Gateway URL must include an explicit port.",
+      "网关 URL 必须包含明确端口。",
     );
   });
 
   it("rejects https:// scheme", () => {
     expect(validateGatewayUrl("https://gateway.example.com:443")).toBe(
-      "Gateway URL must start with ws:// or wss://.",
+      "网关 URL 必须以 ws:// 或 wss:// 开头。",
     );
   });
 
   it("rejects http:// scheme", () => {
     expect(validateGatewayUrl("http://localhost:8080")).toBe(
-      "Gateway URL must start with ws:// or wss://.",
+      "网关 URL 必须以 ws:// 或 wss:// 开头。",
     );
   });
 
   it("rejects completely invalid URL", () => {
     expect(validateGatewayUrl("not-a-url")).toBe(
-      "Enter a valid gateway URL including port.",
+      "请输入包含端口的有效网关 URL。",
     );
   });
 
   it("rejects out-of-range ports", () => {
     expect(validateGatewayUrl("wss://gateway.example.com:65536")).toBe(
-      "Enter a valid gateway URL including port.",
+      "请输入包含端口的有效网关 URL。",
     );
   });
 
   it("rejects userinfo URLs with no explicit port", () => {
     expect(validateGatewayUrl("ws://user:pass@gateway.example.com")).toBe(
-      "Gateway URL must include an explicit port.",
+      "网关 URL 必须包含明确端口。",
     );
   });
 
   it("rejects URL with only whitespace", () => {
-    expect(validateGatewayUrl("   ")).toBe("Gateway URL is required.");
+    expect(validateGatewayUrl("   ")).toBe("请填写网关 URL。");
   });
 });
 
@@ -130,7 +130,7 @@ describe("checkGatewayConnection", () => {
       gateway_disable_device_pairing: true,
       gateway_allow_insecure_tls: true,
     });
-    expect(result).toEqual({ ok: true, message: "Gateway reachable." });
+    expect(result).toEqual({ ok: true, message: "网关连接正常。" });
   });
 
   it("returns gateway-provided error message when offline", async () => {
