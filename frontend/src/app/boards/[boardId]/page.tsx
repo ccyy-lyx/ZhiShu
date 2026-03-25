@@ -527,12 +527,12 @@ const taskStatusLabel = (value?: string | null): string => {
   );
 };
 
-const priorityLabel = (value?: string | null): string => {
+const _priorityLabel = (value?: string | null): string => {
   if (!value) return "—";
   return priorities.find((option) => option.value === value)?.label ?? value;
 };
 
-const approvalStatusLabel = (value?: string | null): string => {
+const _approvalStatusLabel = (value?: string | null): string => {
   if (value === "approved") return "已通过";
   if (value === "rejected") return "已拒绝";
   if (value === "pending") return "待处理";
