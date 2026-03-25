@@ -61,12 +61,12 @@ describe("AgentsTable", () => {
       "href",
       "/boards/board-1",
     );
-    expect(screen.getByRole("link", { name: "Edit" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "编辑" })).toHaveAttribute(
       "href",
       "/agents/agent-1/edit",
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    fireEvent.click(screen.getByRole("button", { name: "删除" }));
     expect(onDelete).toHaveBeenCalledWith(agent);
   });
 
@@ -79,11 +79,9 @@ describe("AgentsTable", () => {
       />,
     );
 
+    expect(screen.queryByRole("link", { name: "编辑" })).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: "Edit" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Delete" }),
+      screen.queryByRole("button", { name: "删除" }),
     ).not.toBeInTheDocument();
   });
 
@@ -99,20 +97,20 @@ describe("AgentsTable", () => {
     );
 
     expect(
-      screen.queryByRole("columnheader", { name: "Status" }),
+      screen.queryByRole("columnheader", { name: "状态" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("columnheader", { name: "Session" }),
+      screen.queryByRole("columnheader", { name: "会话" }),
     ).not.toBeInTheDocument();
 
     const headers = screen
       .getAllByRole("columnheader")
       .map((header) => header.textContent?.replace(/[↑↓↕]/g, "").trim());
     expect(headers.slice(0, 4)).toEqual([
-      "Updated",
-      "Agent",
-      "Board",
-      "Last seen",
+      "更新时间",
+      "智能体",
+      "看板",
+      "最近在线",
     ]);
   });
 
