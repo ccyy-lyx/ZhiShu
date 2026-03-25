@@ -21,6 +21,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [localMode]);
 
   if (localMode) {
+    const proxyAuthEnabled = process.env.NEXT_PUBLIC_PROXY_AUTH === "true";
+
+    // When running behind a reverse proxy that injects Authorization for /api/*,
+    // users should not need to paste/store a local token in the browser.
+    if (!getLocalAuthToken() && proxyAuthEnabled) {
+      return <>{children}</>;
+    }
+
     if (!getLocalAuthToken()) {
       return <LocalAuthLogin />;
     }
