@@ -47,11 +47,11 @@ const initialsFrom = (value?: string | null) => {
 
 const summarizeAccess = (allRead: boolean, allWrite: boolean) => {
   if (allRead || allWrite) {
-    if (allRead && allWrite) return "All boards: read + write";
-    if (allWrite) return "All boards: write";
-    return "All boards: read";
+    if (allRead && allWrite) return "全部看板：读 + 写";
+    if (allWrite) return "全部看板：写";
+    return "全部看板：读";
   }
-  return "Selected boards";
+  return "指定看板";
 };
 
 const memberDisplay = (member: OrganizationMemberRead) => {
@@ -60,7 +60,7 @@ const memberDisplay = (member: OrganizationMemberRead) => {
     member.user?.preferred_name ||
     member.user?.email ||
     member.user_id;
-  const secondary = member.user?.email ?? "No email on file";
+  const secondary = member.user?.email ?? "未记录邮箱";
   return {
     primary,
     secondary,
@@ -91,7 +91,7 @@ export function MembersInvitesTable({
     () => [
       {
         id: "member",
-        header: "Member",
+        header: "成员",
         cell: ({ row }) => {
           if (row.original.kind === "member") {
             const display = memberDisplay(row.original.member);
@@ -122,7 +122,7 @@ export function MembersInvitesTable({
                   {row.original.invite.invited_email}
                 </div>
                 <div className="text-xs text-slate-500">
-                  Invited {formatTimestamp(row.original.invite.created_at)}
+                  邀请于 {formatTimestamp(row.original.invite.created_at)}
                 </div>
               </div>
             </div>
@@ -131,7 +131,7 @@ export function MembersInvitesTable({
       },
       {
         id: "status",
-        header: "Status",
+        header: "状态",
         cell: ({ row }) => {
           if (row.original.kind === "member") {
             return (
@@ -143,7 +143,7 @@ export function MembersInvitesTable({
 
           return (
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="warning">Pending</Badge>
+              <Badge variant="warning">待处理</Badge>
               <Badge variant={roleBadgeVariant(row.original.invite.role)}>
                 {row.original.invite.role}
               </Badge>
@@ -153,7 +153,7 @@ export function MembersInvitesTable({
       },
       {
         id: "access",
-        header: "Access",
+        header: "权限",
         cell: ({ row }) => (
           <span className="text-slate-600">
             {row.original.kind === "member"
@@ -170,12 +170,12 @@ export function MembersInvitesTable({
       },
       {
         id: "actions",
-        header: "Actions",
+        header: "操作",
         cell: ({ row }) => {
           if (row.original.kind === "member") {
             const member = row.original.member;
             if (!isAdmin) {
-              return <span className="text-xs text-slate-400">Admin only</span>;
+              return <span className="text-xs text-slate-400">仅管理员可操作</span>;
             }
             return (
               <div className="flex justify-end">
@@ -185,7 +185,7 @@ export function MembersInvitesTable({
                   size="sm"
                   onClick={() => onManageAccess(member.id)}
                 >
-                  Manage access
+                  管理权限
                 </Button>
               </div>
             );
@@ -201,7 +201,7 @@ export function MembersInvitesTable({
                 onClick={() => onCopyInvite(invite)}
               >
                 <Copy className="h-4 w-4" />
-                {copiedInviteId === invite.id ? "Copied" : "Copy link"}
+                {copiedInviteId === invite.id ? "已复制" : "复制链接"}
               </Button>
               <Button
                 type="button"
@@ -210,7 +210,7 @@ export function MembersInvitesTable({
                 onClick={() => onRevokeInvite(invite.id)}
                 disabled={isRevoking}
               >
-                Revoke
+                撤销邀请
               </Button>
             </div>
           );
@@ -239,8 +239,8 @@ export function MembersInvitesTable({
     <DataTable
       table={table}
       isLoading={isLoading}
-      loadingLabel="Loading members..."
-      emptyMessage="No members or invites yet."
+      loadingLabel="加载成员中..."
+      emptyMessage="暂无成员或邀请。"
       headerClassName="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500"
       headerCellClassName="px-5 py-3 text-left font-medium"
       cellClassName="px-5 py-4"

@@ -51,7 +51,7 @@ const resolvePlaceholder = (ariaLabel: string, placeholder?: string) => {
   }
   const trimmed = ariaLabel.trim();
   if (!trimmed) {
-    return "Select an option";
+    return "请选择";
   }
   return trimmed.endsWith("...") ? trimmed : `${trimmed}...`;
 };
@@ -70,9 +70,9 @@ const resolveSearchPlaceholder = (
   }
   const cleaned = ariaLabel.replace(/^select\\s+/i, "").trim();
   if (!cleaned) {
-    return "Search...";
+    return "搜索...";
   }
-  const value = `Search ${cleaned}`;
+  const value = `搜索 ${cleaned}`;
   return value.endsWith("...") ? value : `${value}...`;
 };
 
@@ -185,7 +185,7 @@ export default function DropdownSelect({
           ) : null}
           <CommandList ref={listRef} className="max-h-64 p-1">
             <CommandEmpty className="px-3 py-6 text-center text-sm text-slate-500">
-              {emptyMessage ?? "No results found."}
+              {emptyMessage ?? "未找到结果。"}
             </CommandEmpty>
             {options.map((option) => {
               const isSelected = value === option.value;

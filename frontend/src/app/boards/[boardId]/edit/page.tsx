@@ -150,7 +150,7 @@ function WebhookCard({
             onClick={() => onCopy(webhook)}
             disabled={isBusy}
           >
-            {copiedWebhookId === webhook.id ? "Copied" : "Copy endpoint"}
+            {copiedWebhookId === webhook.id ? "已复制" : "复制端点"}
           </Button>
           <Button
             type="button"
@@ -158,7 +158,7 @@ function WebhookCard({
             onClick={() => onViewPayloads(webhook.id)}
             disabled={isBusy}
           >
-            View payloads
+            查看载荷
           </Button>
           {isEditing ? (
             <>
@@ -172,14 +172,14 @@ function WebhookCard({
                 }}
                 disabled={isBusy}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 type="button"
                 onClick={handleSave}
                 disabled={isBusy || !trimmedDescription}
               >
-                {isUpdatingWebhook ? "Saving…" : "Save"}
+                {isUpdatingWebhook ? "保存中…" : "保存"}
               </Button>
             </>
           ) : (
@@ -194,7 +194,7 @@ function WebhookCard({
                 }}
                 disabled={isBusy}
               >
-                Edit
+                编辑
               </Button>
               <Button
                 type="button"
@@ -202,7 +202,7 @@ function WebhookCard({
                 onClick={() => onDelete(webhook.id)}
                 disabled={isBusy}
               >
-                {isDeletingWebhook ? "Deleting…" : "Delete"}
+                {isDeletingWebhook ? "删除中…" : "删除"}
               </Button>
             </>
           )}
@@ -213,28 +213,28 @@ function WebhookCard({
           <Textarea
             value={draftDescription}
             onChange={(event) => setDraftDescription(event.target.value)}
-            placeholder="Describe exactly what the lead agent should do when payloads arrive."
+            placeholder="请描述收到载荷后该智能体需要执行的动作。"
             className="min-h-[90px]"
             disabled={isBusy}
           />
           <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-900">Agent</label>
+            <label className="text-sm font-medium text-slate-900">智能体</label>
             <Select
               value={draftAgentValue}
               onValueChange={setDraftAgentValue}
               disabled={isBusy}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Lead agent (default fallback)" />
+                <SelectValue placeholder="主智能体（默认兜底）" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={LEAD_AGENT_VALUE}>
-                  Lead agent (default fallback)
+                  主智能体（默认兜底）
                 </SelectItem>
                 {agents.map((agent) => (
                   <SelectItem key={agent.id} value={agent.id}>
                     {agent.name}
-                    {agent.is_board_lead ? " (lead)" : ""}
+                    {agent.is_board_lead ? "（主）" : ""}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -250,7 +250,7 @@ function WebhookCard({
             />
           </div>
           <p className="text-xs text-slate-600">
-            Recipient: {mappedAgent?.name ?? "Lead agent"}
+            接收智能体：{mappedAgent?.name ?? "主智能体"}
           </p>
         </>
       )}
@@ -430,7 +430,7 @@ export default function EditBoardPage() {
         }
       },
       onError: (err) => {
-        setError(err.message || "Something went wrong.");
+        setError(err.message || "操作失败，请稍后重试。");
       },
     },
   });
@@ -449,7 +449,7 @@ export default function EditBoardPage() {
           });
         },
         onError: (err) => {
-          setWebhookError(err.message || "Unable to create webhook.");
+          setWebhookError(err.message || "创建 Webhook 失败。");
         },
       },
     });
@@ -466,7 +466,7 @@ export default function EditBoardPage() {
           });
         },
         onError: (err) => {
-          setWebhookError(err.message || "Unable to delete webhook.");
+          setWebhookError(err.message || "删除 Webhook 失败。");
         },
       },
     });
@@ -483,7 +483,7 @@ export default function EditBoardPage() {
           });
         },
         onError: (err) => {
-          setWebhookError(err.message || "Unable to update webhook.");
+          setWebhookError(err.message || "更新 Webhook 失败。");
         },
       },
     });
@@ -573,7 +573,7 @@ export default function EditBoardPage() {
   }, [groupsQuery.data]);
   const groupOptions = useMemo(
     () => [
-      { value: "none", label: "No group" },
+      { value: "none", label: "不分组" },
       ...groups.map((group) => ({ value: group.id, label: group.name })),
     ],
     [groups],
@@ -615,21 +615,21 @@ export default function EditBoardPage() {
     if (!isSignedIn || !boardId) return;
     const trimmedName = resolvedName.trim();
     if (!trimmedName) {
-      setError("Board name is required.");
+      setError("请先填写看板名称。");
       return;
     }
     const resolvedGatewayId = displayGatewayId;
     if (!resolvedGatewayId) {
-      setError("Select a gateway before saving.");
+      setError("保存前请先选择网关。");
       return;
     }
     const trimmedDescription = resolvedDescription.trim();
     if (!trimmedDescription) {
-      setError("Board description is required.");
+      setError("请先填写看板描述。");
       return;
     }
     if (!Number.isInteger(resolvedMaxAgents) || resolvedMaxAgents < 0) {
-      setError("Max worker agents must be a non-negative integer.");
+      setError("最大执行智能体数必须是非负整数。");
       return;
     }
 
@@ -644,7 +644,7 @@ export default function EditBoardPage() {
           unknown
         >;
       } catch {
-        setMetricsError("Success metrics must be valid JSON.");
+        setMetricsError("成功指标必须是合法 JSON。");
         return;
       }
     }
@@ -682,7 +682,7 @@ export default function EditBoardPage() {
     if (!boardId) return;
     const trimmedDescription = webhookDescription.trim();
     if (!trimmedDescription) {
-      setWebhookError("Webhook instruction is required.");
+      setWebhookError("请先填写 Webhook 指令。");
       return;
     }
     setWebhookError(null);
@@ -714,7 +714,7 @@ export default function EditBoardPage() {
     if (updateWebhookMutation.isPending) return false;
     const trimmedDescription = description.trim();
     if (!trimmedDescription) {
-      setWebhookError("Webhook instruction is required.");
+      setWebhookError("请先填写 Webhook 指令。");
       return false;
     }
     setWebhookError(null);
@@ -744,7 +744,7 @@ export default function EditBoardPage() {
         );
       }, 1500);
     } catch {
-      setWebhookError("Unable to copy webhook endpoint.");
+      setWebhookError("复制 Webhook 端点失败。");
     }
   };
 
@@ -757,14 +757,14 @@ export default function EditBoardPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to edit boards.",
+          message: "请先登录后编辑看板。",
           forceRedirectUrl: `/boards/${boardId}/edit`,
           signUpForceRedirectUrl: `/boards/${boardId}/edit`,
         }}
-        title="Edit board"
-        description="Update board settings and gateway."
+        title="编辑看板"
+        description="更新看板设置与网关配置。"
         isAdmin={isAdmin}
-        adminOnlyMessage="Only organization owners and admins can edit board settings."
+        adminOnlyMessage="仅组织所有者和管理员可以编辑看板设置。"
         mainRef={mainRef}
       >
         <div className="space-y-6">
@@ -778,10 +778,10 @@ export default function EditBoardPage() {
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-amber-900">
-                    Goal needs confirmation
+                    目标尚未确认
                   </p>
                   <p className="mt-1 text-xs text-amber-800/80">
-                    Start onboarding to draft an objective and success metrics.
+                    开始引导，生成目标与成功指标。
                   </p>
                 </div>
                 <Button
@@ -790,34 +790,34 @@ export default function EditBoardPage() {
                   onClick={() => setIsOnboardingOpen(true)}
                   disabled={isLoading || !baseBoard}
                 >
-                  Start onboarding
+                  开始引导
                 </Button>
               </div>
             ) : null}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Board name <span className="text-red-500">*</span>
+                  看板名称 <span className="text-red-500">*</span>
                 </label>
                 <Input
                   value={resolvedName}
                   onChange={(event) => setName(event.target.value)}
-                  placeholder="Board name"
+                  placeholder="看板名称"
                   disabled={isLoading || !baseBoard}
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Gateway <span className="text-red-500">*</span>
+                  网关 <span className="text-red-500">*</span>
                 </label>
                 <SearchableSelect
-                  ariaLabel="Select gateway"
+                  ariaLabel="选择网关"
                   value={displayGatewayId}
                   onValueChange={setGatewayId}
                   options={gatewayOptions}
-                  placeholder="Select gateway"
-                  searchPlaceholder="Search gateways..."
-                  emptyMessage="No gateways found."
+                  placeholder="选择网关"
+                  searchPlaceholder="搜索网关..."
+                  emptyMessage="没有可用网关。"
                   triggerClassName="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   contentClassName="rounded-xl border border-slate-200 shadow-lg"
                   itemClassName="px-4 py-3 text-sm text-slate-700 data-[selected=true]:bg-slate-50 data-[selected=true]:text-slate-900"
@@ -828,20 +828,20 @@ export default function EditBoardPage() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Board type
+                  看板类型
                 </label>
                 <Select value={resolvedBoardType} onValueChange={setBoardType}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select board type" />
+                    <SelectValue placeholder="选择看板类型" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="goal">Goal</SelectItem>
-                    <SelectItem value="general">General</SelectItem>
+                    <SelectItem value="goal">目标型</SelectItem>
+                    <SelectItem value="general">通用型</SelectItem>
                   </SelectContent>
                 </Select>
                 <div className="space-y-2 pt-1">
                   <label className="text-sm font-medium text-slate-900">
-                    Max worker agents
+                    最大执行智能体数
                   </label>
                   <Input
                     type="number"
@@ -862,30 +862,29 @@ export default function EditBoardPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Board group
+                  看板分组
                 </label>
                 <SearchableSelect
-                  ariaLabel="Select board group"
+                  ariaLabel="选择看板分组"
                   value={resolvedBoardGroupId}
                   onValueChange={setBoardGroupId}
                   options={groupOptions}
-                  placeholder="No group"
-                  searchPlaceholder="Search groups..."
-                  emptyMessage="No groups found."
+                  placeholder="不分组"
+                  searchPlaceholder="搜索分组..."
+                  emptyMessage="没有可用分组。"
                   triggerClassName="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   contentClassName="rounded-xl border border-slate-200 shadow-lg"
                   itemClassName="px-4 py-3 text-sm text-slate-700 data-[selected=true]:bg-slate-50 data-[selected=true]:text-slate-900"
                   disabled={isLoading}
                 />
                 <p className="text-xs text-slate-500">
-                  Boards in the same group can share cross-board context for
-                  agents.
+                  同一分组的看板可以为智能体共享跨看板上下文。
                 </p>
               </div>
               {resolvedBoardType !== "general" ? (
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-900">
-                    Target date
+                  目标日期
                   </label>
                   <Input
                     type="date"
@@ -899,12 +898,12 @@ export default function EditBoardPage() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900">
-                Description <span className="text-red-500">*</span>
+                描述 <span className="text-red-500">*</span>
               </label>
               <Textarea
                 value={resolvedDescription}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="What context should the lead agent know?"
+                placeholder="给主智能体的上下文说明"
                 className="min-h-[120px]"
                 disabled={isLoading}
               />
@@ -914,7 +913,7 @@ export default function EditBoardPage() {
               <>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-900">
-                    Objective
+                    目标
                     {isGoalFieldsRequired && (
                       <span className="text-red-500"> *</span>
                     )}
@@ -922,7 +921,7 @@ export default function EditBoardPage() {
                   <Textarea
                     value={resolvedObjective}
                     onChange={(event) => setObjective(event.target.value)}
-                    placeholder="What should this board achieve?"
+                    placeholder="这个看板要达成什么？"
                     className="min-h-[120px]"
                     disabled={isLoading}
                   />
@@ -930,7 +929,7 @@ export default function EditBoardPage() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-900">
-                    Success metrics (JSON)
+                    成功指标（JSON）
                     {isGoalFieldsRequired && (
                       <span className="text-red-500"> *</span>
                     )}
@@ -938,12 +937,12 @@ export default function EditBoardPage() {
                   <Textarea
                     value={resolvedSuccessMetrics}
                     onChange={(event) => setSuccessMetrics(event.target.value)}
-                    placeholder='e.g. { "target": "Launch by week 2" }'
+                    placeholder='例如：{ "target": "第 2 周上线" }'
                     className="min-h-[140px] font-mono text-xs"
                     disabled={isLoading}
                   />
                   <p className="text-xs text-slate-500">
-                    Add key outcomes so the lead agent can measure progress.
+                    添加关键结果，便于主智能体衡量进展。
                   </p>
                   {metricsError ? (
                     <p className="text-xs text-red-500">{metricsError}</p>
@@ -955,10 +954,10 @@ export default function EditBoardPage() {
             <section className="space-y-3 border-t border-slate-200 pt-4">
               <div>
                 <h2 className="text-base font-semibold text-slate-900">
-                  Rules
+                  规则
                 </h2>
                 <p className="text-xs text-slate-600">
-                  Configure board-level workflow enforcement.
+                  配置看板级流程约束。
                 </p>
               </div>
               <div className="flex items-start gap-3 rounded-lg border border-slate-200 px-3 py-3">
@@ -966,7 +965,7 @@ export default function EditBoardPage() {
                   type="button"
                   role="switch"
                   aria-checked={resolvedRequireApprovalForDone}
-                  aria-label="Require approval"
+                  aria-label="需要审批"
                   onClick={() =>
                     setRequireApprovalForDone(!resolvedRequireApprovalForDone)
                   }
@@ -987,12 +986,11 @@ export default function EditBoardPage() {
                 </button>
                 <span className="space-y-1">
                   <span className="block text-sm font-medium text-slate-900">
-                    Require approval
+                    需要审批
                   </span>
                   <span className="block text-xs text-slate-600">
-                    Require at least one linked approval in{" "}
-                    <code>approved</code> state before a task can be marked{" "}
-                    <code>done</code>.
+                    任务在标记为 <code>done</code> 前，必须至少关联一个状态为{" "}
+                    <code>approved</code> 的审批。
                   </span>
                 </span>
               </div>
@@ -1001,7 +999,7 @@ export default function EditBoardPage() {
                   type="button"
                   role="switch"
                   aria-checked={resolvedRequireReviewBeforeDone}
-                  aria-label="Require review before done"
+                  aria-label="完成前需进入评审"
                   onClick={() =>
                     setRequireReviewBeforeDone(!resolvedRequireReviewBeforeDone)
                   }
@@ -1022,11 +1020,10 @@ export default function EditBoardPage() {
                 </button>
                 <span className="space-y-1">
                   <span className="block text-sm font-medium text-slate-900">
-                    Require review before done
+                    完成前需进入评审
                   </span>
                   <span className="block text-xs text-slate-600">
-                    Tasks must move to <code>review</code> before they can be
-                    marked <code>done</code>.
+                    任务必须先进入 <code>review</code>，才能标记为 <code>done</code>。
                   </span>
                 </span>
               </div>
@@ -1035,7 +1032,7 @@ export default function EditBoardPage() {
                   type="button"
                   role="switch"
                   aria-checked={resolvedCommentRequiredForReview}
-                  aria-label="Require comment for review"
+                  aria-label="进入评审需评论"
                   onClick={() =>
                     setCommentRequiredForReview(
                       !resolvedCommentRequiredForReview,
@@ -1058,11 +1055,10 @@ export default function EditBoardPage() {
                 </button>
                 <span className="space-y-1">
                   <span className="block text-sm font-medium text-slate-900">
-                    Require comment for review
+                    进入评审需评论
                   </span>
                   <span className="block text-xs text-slate-600">
-                    Require a task comment when moving status to{" "}
-                    <code>review</code>.
+                    任务状态切换到 <code>review</code> 时，必须填写任务评论。
                   </span>
                 </span>
               </div>
@@ -1071,7 +1067,7 @@ export default function EditBoardPage() {
                   type="button"
                   role="switch"
                   aria-checked={resolvedBlockStatusChangesWithPendingApproval}
-                  aria-label="Block status changes with pending approval"
+                  aria-label="有待审批时阻止状态变更"
                   onClick={() =>
                     setBlockStatusChangesWithPendingApproval(
                       !resolvedBlockStatusChangesWithPendingApproval,
@@ -1094,11 +1090,10 @@ export default function EditBoardPage() {
                 </button>
                 <span className="space-y-1">
                   <span className="block text-sm font-medium text-slate-900">
-                    Block status changes with pending approval
+                    有待审批时阻止状态变更
                   </span>
                   <span className="block text-xs text-slate-600">
-                    Prevent status transitions while any linked approval is in{" "}
-                    <code>pending</code> state.
+                    只要存在状态为 <code>pending</code> 的关联审批，就禁止任务状态流转。
                   </span>
                 </span>
               </div>
@@ -1107,7 +1102,7 @@ export default function EditBoardPage() {
                   type="button"
                   role="switch"
                   aria-checked={resolvedOnlyLeadCanChangeStatus}
-                  aria-label="Only lead can change status"
+                  aria-label="仅主智能体可改状态"
                   onClick={() =>
                     setOnlyLeadCanChangeStatus(!resolvedOnlyLeadCanChangeStatus)
                   }
@@ -1128,10 +1123,10 @@ export default function EditBoardPage() {
                 </button>
                 <span className="space-y-1">
                   <span className="block text-sm font-medium text-slate-900">
-                    Only lead can change status
+                    仅主智能体可改状态
                   </span>
                   <span className="block text-xs text-slate-600">
-                    Restrict status changes to the board lead.
+                    仅允许看板主智能体修改任务状态。
                   </span>
                 </span>
               </div>
@@ -1140,7 +1135,7 @@ export default function EditBoardPage() {
             {gateways.length === 0 ? (
               <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
                 <p>
-                  No gateways available. Create one in Gateways to continue.
+                  当前没有可用网关。请先到网关页面创建。
                 </p>
               </div>
             ) : null}
@@ -1156,42 +1151,41 @@ export default function EditBoardPage() {
                 onClick={() => router.push(`/boards/${boardId}`)}
                 disabled={isLoading}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading || !baseBoard || !isFormReady}
               >
-                {isLoading ? "Saving…" : "Save changes"}
+                {isLoading ? "保存中…" : "保存更改"}
               </Button>
             </div>
 
             <section className="space-y-4 border-t border-slate-200 pt-4">
               <div>
                 <h2 className="text-base font-semibold text-slate-900">
-                  Webhooks
+                  Webhook
                 </h2>
                 <p className="text-xs text-slate-600">
-                  Add inbound webhook endpoints so the lead agent can react to
-                  external events.
+                  添加入站 Webhook 端点，让主智能体可以响应外部事件。
                 </p>
               </div>
               <div className="space-y-3 rounded-lg border border-slate-200 px-4 py-4">
                 <label className="text-sm font-medium text-slate-900">
-                  Lead agent instruction
+                  主智能体指令
                 </label>
                 <Textarea
                   value={webhookDescription}
                   onChange={(event) =>
                     setWebhookDescription(event.target.value)
                   }
-                  placeholder="Describe exactly what the lead agent should do when payloads arrive."
+                  placeholder="请明确描述收到载荷后主智能体要执行的动作。"
                   className="min-h-[90px]"
                   disabled={isLoading || isWebhookBusy}
                 />
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-900">
-                    Agent
+                    智能体
                   </label>
                   <Select
                     value={webhookAgentValue}
@@ -1199,16 +1193,16 @@ export default function EditBoardPage() {
                     disabled={isLoading || isWebhookBusy}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Lead agent (default fallback)" />
+                      <SelectValue placeholder="主智能体（默认兜底）" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value={LEAD_AGENT_VALUE}>
-                        Lead agent (default fallback)
+                        主智能体（默认兜底）
                       </SelectItem>
                       {webhookAgents.map((agent) => (
                         <SelectItem key={agent.id} value={agent.id}>
                           {agent.name}
-                          {agent.is_board_lead ? " (lead)" : ""}
+                          {agent.is_board_lead ? "（主）" : ""}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1226,8 +1220,8 @@ export default function EditBoardPage() {
                     }
                   >
                     {createWebhookMutation.isPending
-                      ? "Creating webhook…"
-                      : "Create webhook"}
+                      ? "创建中…"
+                      : "创建 Webhook"}
                   </Button>
                 </div>
               </div>
@@ -1237,12 +1231,12 @@ export default function EditBoardPage() {
               ) : null}
 
               {webhooksQuery.isLoading ? (
-                <p className="text-sm text-slate-500">Loading webhooks…</p>
+                <p className="text-sm text-slate-500">正在加载 Webhook…</p>
               ) : null}
 
               {!webhooksQuery.isLoading && webhooks.length === 0 ? (
                 <p className="rounded-lg border border-dashed border-slate-300 px-4 py-3 text-sm text-slate-600">
-                  No webhooks configured yet.
+                  还没有配置任何 Webhook。
                 </p>
               ) : null}
 
@@ -1274,7 +1268,7 @@ export default function EditBoardPage() {
       </DashboardPageLayout>
       <Dialog open={isOnboardingOpen} onOpenChange={setIsOnboardingOpen}>
         <DialogContent
-          aria-label="Board onboarding"
+          aria-label="看板引导"
           onPointerDownOutside={(event) => event.preventDefault()}
           onInteractOutside={(event) => event.preventDefault()}
         >
@@ -1283,7 +1277,7 @@ export default function EditBoardPage() {
               <button
                 type="button"
                 className="sticky top-4 z-10 ml-auto rounded-lg border border-slate-200 bg-[color:var(--surface)] p-2 text-slate-500 transition hover:bg-slate-50"
-                aria-label="Close onboarding"
+                aria-label="关闭引导"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -1296,7 +1290,7 @@ export default function EditBoardPage() {
             />
           ) : (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-              Unable to start onboarding.
+              无法启动引导。
             </div>
           )}
         </DialogContent>

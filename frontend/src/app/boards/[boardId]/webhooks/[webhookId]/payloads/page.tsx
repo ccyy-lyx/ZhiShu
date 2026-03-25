@@ -95,21 +95,21 @@ export default function WebhookPayloadsPage() {
   const isLoading = payloadsQuery.isLoading || webhookQuery.isLoading;
 
   const payloadTitle = useMemo(() => {
-    if (!webhook) return "Webhook payloads";
-    return `Webhook ${webhook.id.slice(0, 8)} payloads`;
+    if (!webhook) return "Webhook 载荷";
+    return `Webhook ${webhook.id.slice(0, 8)} 载荷`;
   }, [webhook]);
 
   return (
     <DashboardPageLayout
       signedOut={{
-        message: "Sign in to view webhook payloads.",
+        message: "请先登录后查看 Webhook 载荷。",
         forceRedirectUrl: `/boards/${boardId}/webhooks/${webhookId}/payloads`,
         signUpForceRedirectUrl: `/boards/${boardId}/webhooks/${webhookId}/payloads`,
       }}
-      title="Webhook payloads"
-      description="Review payloads received by this webhook."
+      title="Webhook 载荷"
+      description="查看此 Webhook 接收到的请求载荷。"
       isAdmin={isAdmin}
-      adminOnlyMessage="Only organization owners and admins can view webhook payloads."
+      adminOnlyMessage="仅组织所有者和管理员可以查看 Webhook 载荷。"
     >
       <div className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -118,7 +118,7 @@ export default function WebhookPayloadsPage() {
               {payloadTitle}
             </h2>
             <p className="text-sm text-slate-600">
-              {webhook?.description ?? "Loading webhook details..."}
+              {webhook?.description ?? "正在加载 Webhook 详情..."}
             </p>
           </div>
           <Button
@@ -126,7 +126,7 @@ export default function WebhookPayloadsPage() {
             variant="ghost"
             onClick={() => router.push(`/boards/${boardId}/edit`)}
           >
-            Back to board settings
+            返回看板设置
           </Button>
         </div>
 
@@ -139,9 +139,7 @@ export default function WebhookPayloadsPage() {
         ) : null}
 
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2">
-          <p className="text-sm text-slate-700">
-            {total} payload{total === 1 ? "" : "s"} total
-          </p>
+          <p className="text-sm text-slate-700">共 {total} 条载荷</p>
           <div className="flex items-center gap-2">
             <Button
               type="button"
@@ -151,10 +149,10 @@ export default function WebhookPayloadsPage() {
               }
               disabled={!hasPrev || isLoading}
             >
-              Previous
+              上一页
             </Button>
             <span className="text-xs text-slate-600">
-              Page {currentPage} of {pageCount}
+              第 {currentPage} / {pageCount} 页
             </span>
             <Button
               type="button"
@@ -162,7 +160,7 @@ export default function WebhookPayloadsPage() {
               onClick={() => setOffset((current) => current + PAGE_LIMIT)}
               disabled={!hasNext || isLoading}
             >
-              Next
+              下一页
             </Button>
           </div>
         </div>
@@ -172,12 +170,12 @@ export default function WebhookPayloadsPage() {
         ) : null}
 
         {isLoading ? (
-          <p className="text-sm text-slate-500">Loading payloads...</p>
+          <p className="text-sm text-slate-500">正在加载载荷...</p>
         ) : null}
 
         {!isLoading && payloads.length === 0 ? (
           <p className="rounded-lg border border-dashed border-slate-300 px-4 py-3 text-sm text-slate-600">
-            No payloads received for this webhook yet.
+            这个 Webhook 暂时还没有收到任何载荷。
           </p>
         ) : null}
 
@@ -189,7 +187,7 @@ export default function WebhookPayloadsPage() {
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-semibold text-slate-900">
-                  Payload {payload.id.slice(0, 8)}
+                  载荷 {payload.id.slice(0, 8)}
                 </span>
                 <span className="text-xs text-slate-500">
                   {new Date(payload.received_at).toLocaleString()}
@@ -197,11 +195,10 @@ export default function WebhookPayloadsPage() {
               </div>
               <div className="grid gap-2 text-xs text-slate-600 md:grid-cols-2">
                 <p>
-                  Content type:{" "}
-                  <code>{payload.content_type ?? "not provided"}</code>
+                  内容类型: <code>{payload.content_type ?? "未提供"}</code>
                 </p>
                 <p>
-                  Source IP: <code>{payload.source_ip ?? "not provided"}</code>
+                  来源 IP: <code>{payload.source_ip ?? "未提供"}</code>
                 </p>
               </div>
               <pre className="max-h-96 overflow-auto rounded-md bg-slate-900/95 p-3 text-xs text-slate-100">

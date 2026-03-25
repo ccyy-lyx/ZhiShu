@@ -280,7 +280,7 @@ const toLiveFeedFromBoardChat = (memory: BoardChatMessage): LiveFeedItem => {
     agent_id: null,
     actor_name: actorName,
     task_id: null,
-    title: isCommand ? "Board command" : "Board chat",
+    title: isCommand ? "看板指令" : "看板聊天",
     event_type: isCommand ? "board.command" : "board.chat",
   };
 };
@@ -291,7 +291,7 @@ const normalizeAgentStatus = (value?: string | null): string => {
 };
 
 const humanizeAgentStatus = (value: string): string =>
-  value.replace(/_/g, " ").trim() || "offline";
+  value.replace(/_/g, " ").trim() || "离线";
 
 const toLiveFeedFromAgentSnapshot = (agent: Agent): LiveFeedItem => {
   const status = normalizeAgentStatus(agent.status);
@@ -305,11 +305,11 @@ const toLiveFeedFromAgentSnapshot = (agent: Agent): LiveFeedItem => {
   return {
     id: `agent:${agent.id}:snapshot:${status}:${stamp}`,
     created_at: stamp,
-    message: `${agent.name} is ${humanizeAgentStatus(status)}.`,
+    message: `${agent.name} 当前${humanizeAgentStatus(status)}。`,
     agent_id: agent.id,
     actor_name: null,
     task_id: null,
-    title: `Agent · ${agent.name}`,
+    title: `智能体 · ${agent.name}`,
     event_type: eventType,
   };
 };
@@ -348,12 +348,12 @@ const toLiveFeedFromAgentUpdate = (
   const stamp = agent.last_seen_at ?? agent.updated_at ?? agent.created_at;
   const message =
     eventType === "agent.created"
-      ? `${agent.name} joined this board.`
+      ? `${agent.name} 已加入这个看板。`
       : eventType === "agent.online"
-        ? `${agent.name} is online.`
+        ? `${agent.name} 已在线。`
         : eventType === "agent.offline"
-          ? `${agent.name} is offline.`
-          : `${agent.name} updated (${humanizeAgentStatus(nextStatus)}).`;
+          ? `${agent.name} 已离线。`
+          : `${agent.name} 已更新（${humanizeAgentStatus(nextStatus)}）。`;
   return {
     id: `agent:${agent.id}:${eventType}:${stamp}`,
     created_at: stamp,
@@ -361,14 +361,14 @@ const toLiveFeedFromAgentUpdate = (
     agent_id: agent.id,
     actor_name: null,
     task_id: null,
-    title: `Agent · ${agent.name}`,
+    title: `智能体 · ${agent.name}`,
     event_type: eventType,
   };
 };
 
 const humanizeLiveFeedApprovalAction = (value: string): string => {
   const cleaned = value.replace(/[._-]+/g, " ").trim();
-  if (!cleaned) return "Approval";
+  if (!cleaned) return "审批";
   return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 };
 
@@ -399,18 +399,18 @@ const toLiveFeedFromApproval = (
   const action = humanizeLiveFeedApprovalAction(approval.action_type);
   const statusText =
     nextStatus === "approved"
-      ? "approved"
+      ? "已通过"
       : nextStatus === "rejected"
-        ? "rejected"
-        : "pending";
+        ? "已拒绝"
+        : "待处理";
   const message =
     eventType === "approval.created"
-      ? `${action} requested (${approval.confidence}% confidence).`
+      ? `${action} 已发起（置信度 ${approval.confidence}%）。`
       : eventType === "approval.approved"
-        ? `${action} approved (${approval.confidence}% confidence).`
+        ? `${action} 已通过（置信度 ${approval.confidence}%）。`
         : eventType === "approval.rejected"
-          ? `${action} rejected (${approval.confidence}% confidence).`
-          : `${action} updated (${statusText}, ${approval.confidence}% confidence).`;
+          ? `${action} 已拒绝（置信度 ${approval.confidence}%）。`
+          : `${action} 已更新（${statusText}，置信度 ${approval.confidence}%）。`;
   return {
     id: `approval:${approval.id}:${eventType}:${stamp}`,
     created_at: stamp,
@@ -418,26 +418,26 @@ const toLiveFeedFromApproval = (
     agent_id: approval.agent_id ?? null,
     actor_name: null,
     task_id: approval.task_id ?? null,
-    title: `Approval · ${action}`,
+    title: `审批 · ${action}`,
     event_type: eventType,
   };
 };
 
 const liveFeedEventLabel = (eventType: LiveFeedEventType): string => {
-  if (eventType === "task.comment") return "Comment";
-  if (eventType === "task.created") return "Created";
-  if (eventType === "task.status_changed") return "Status";
-  if (eventType === "board.chat") return "Chat";
-  if (eventType === "board.command") return "Command";
-  if (eventType === "agent.created") return "Agent";
-  if (eventType === "agent.online") return "Online";
-  if (eventType === "agent.offline") return "Offline";
-  if (eventType === "agent.updated") return "Agent update";
-  if (eventType === "approval.created") return "Approval";
-  if (eventType === "approval.updated") return "Approval update";
-  if (eventType === "approval.approved") return "Approved";
-  if (eventType === "approval.rejected") return "Rejected";
-  return "Updated";
+  if (eventType === "task.comment") return "评论";
+  if (eventType === "task.created") return "任务创建";
+  if (eventType === "task.status_changed") return "状态变更";
+  if (eventType === "board.chat") return "看板聊天";
+  if (eventType === "board.command") return "看板指令";
+  if (eventType === "agent.created") return "智能体加入";
+  if (eventType === "agent.online") return "智能体在线";
+  if (eventType === "agent.offline") return "智能体离线";
+  if (eventType === "agent.updated") return "智能体更新";
+  if (eventType === "approval.created") return "审批创建";
+  if (eventType === "approval.updated") return "审批更新";
+  if (eventType === "approval.approved") return "审批通过";
+  if (eventType === "approval.rejected") return "审批拒绝";
+  return "已更新";
 };
 
 const liveFeedEventPillClass = (eventType: LiveFeedEventType): string => {
@@ -508,16 +508,36 @@ const normalizeTagColor = (value?: string | null) => {
 };
 
 const priorities = [
-  { value: "low", label: "Low" },
-  { value: "medium", label: "Medium" },
-  { value: "high", label: "High" },
+  { value: "low", label: "低" },
+  { value: "medium", label: "中" },
+  { value: "high", label: "高" },
 ];
 const statusOptions = [
-  { value: "inbox", label: "Inbox" },
-  { value: "in_progress", label: "In progress" },
-  { value: "review", label: "Review" },
-  { value: "done", label: "Done" },
+  { value: "inbox", label: "收件箱" },
+  { value: "in_progress", label: "进行中" },
+  { value: "review", label: "复核" },
+  { value: "done", label: "已完成" },
 ];
+
+const taskStatusLabel = (value?: string | null): string => {
+  if (!value) return "—";
+  return (
+    statusOptions.find((option) => option.value === value)?.label ??
+    value.replace(/_/g, " ")
+  );
+};
+
+const priorityLabel = (value?: string | null): string => {
+  if (!value) return "—";
+  return priorities.find((option) => option.value === value)?.label ?? value;
+};
+
+const approvalStatusLabel = (value?: string | null): string => {
+  if (value === "approved") return "已通过";
+  if (value === "rejected") return "已拒绝";
+  if (value === "pending") return "待处理";
+  return value?.trim() || "待处理";
+};
 
 const SSE_RECONNECT_BACKOFF = {
   baseMs: 1_000,
@@ -549,7 +569,7 @@ type ToastMessage = {
 const formatActionError = (err: unknown, fallback: string) => {
   if (err instanceof ApiError) {
     if (err.status === 403) {
-      return "Read-only access. You do not have permission to make changes.";
+      return "只读访问。你没有权限进行更改。";
     }
     return err.message || fallback;
   }
@@ -1078,7 +1098,7 @@ export default function BoardDetailPage() {
           });
           if (cancelled) return;
           if (result.status !== 200) {
-            throw new Error("Unable to load live feed.");
+            throw new Error("无法加载动态流。");
           }
           const items = result.data.items ?? [];
           for (const event of items) {
@@ -1110,7 +1130,7 @@ export default function BoardDetailPage() {
       } catch (err) {
         if (cancelled) return;
         setLiveFeedHistoryError(
-          err instanceof Error ? err.message : "Unable to load live feed.",
+          err instanceof Error ? err.message : "无法加载动态流。",
         );
       } finally {
         if (cancelled) return;
@@ -1180,7 +1200,7 @@ export default function BoardDetailPage() {
   }, [boardCustomFieldDefinitions]);
 
   const titleLabel = useMemo(
-    () => (board ? `${board.name} board` : "Board"),
+    () => (board ? `${board.name} 看板` : "看板"),
     [board],
   );
 
@@ -1259,7 +1279,7 @@ export default function BoardDetailPage() {
       const snapshotResult =
         await getBoardSnapshotApiV1BoardsBoardIdSnapshotGet(boardId);
       if (snapshotResult.status !== 200) {
-        throw new Error("Unable to load board snapshot.");
+        throw new Error("无法加载看板快照。");
       }
       const snapshot = snapshotResult.data;
       setBoard(snapshot.board);
@@ -1287,13 +1307,13 @@ export default function BoardDetailPage() {
         const message =
           groupErr instanceof Error
             ? groupErr.message
-            : "Unable to load board group snapshot.";
+            : "无法加载看板分组快照。";
         setGroupSnapshotError(message);
         setGroupSnapshot(null);
       }
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Something went wrong.";
+        err instanceof Error ? err.message : "发生错误，请稍后重试。";
       setError(message);
       setApprovalsError(message);
       setChatError(message);
@@ -1397,11 +1417,11 @@ export default function BoardDetailPage() {
             },
           );
         if (streamResult.status !== 200) {
-          throw new Error("Unable to connect board chat stream.");
+          throw new Error("无法连接看板聊天流。");
         }
         const response = streamResult.data as Response;
         if (!(response instanceof Response) || !response.body) {
-          throw new Error("Unable to connect board chat stream.");
+          throw new Error("无法连接看板聊天流。");
         }
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -1514,11 +1534,11 @@ export default function BoardDetailPage() {
             },
           );
         if (streamResult.status !== 200) {
-          throw new Error("Unable to connect approvals stream.");
+          throw new Error("无法连接审批流。");
         }
         const response = streamResult.data as Response;
         if (!(response instanceof Response) || !response.body) {
-          throw new Error("Unable to connect approvals stream.");
+          throw new Error("无法连接审批流。");
         }
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -1699,11 +1719,11 @@ export default function BoardDetailPage() {
           },
         );
         if (streamResult.status !== 200) {
-          throw new Error("Unable to connect task stream.");
+          throw new Error("无法连接任务流。");
         }
         const response = streamResult.data as Response;
         if (!(response instanceof Response) || !response.body) {
-          throw new Error("Unable to connect task stream.");
+          throw new Error("无法连接任务流。");
         }
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -1871,11 +1891,11 @@ export default function BoardDetailPage() {
           },
         );
         if (streamResult.status !== 200) {
-          throw new Error("Unable to connect agent stream.");
+          throw new Error("无法连接智能体流。");
         }
         const response = streamResult.data as Response;
         if (!(response instanceof Response) || !response.body) {
-          throw new Error("Unable to connect agent stream.");
+          throw new Error("无法连接智能体流。");
         }
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -1981,7 +2001,7 @@ export default function BoardDetailPage() {
     if (!isSignedIn || !boardId) return;
     const trimmed = title.trim();
     if (!trimmed) {
-      setCreateError("Add a task title to continue.");
+      setCreateError("请先填写任务标题。");
       return;
     }
     const createCustomFieldPayload = customFieldPayload(
@@ -1994,7 +2014,7 @@ export default function BoardDetailPage() {
     );
     if (missingRequiredCustomField) {
       setCreateError(
-        `Custom field "${missingRequiredCustomField}" is required.`,
+        `自定义字段“${missingRequiredCustomField}”为必填。`,
       );
       return;
     }
@@ -2014,7 +2034,7 @@ export default function BoardDetailPage() {
         boardId,
         payload,
       );
-      if (result.status !== 200) throw new Error("Unable to create task.");
+      if (result.status !== 200) throw new Error("无法创建任务。");
 
       const created = normalizeTask({
         ...result.data,
@@ -2028,7 +2048,7 @@ export default function BoardDetailPage() {
       setIsDialogOpen(false);
       resetForm();
     } catch (err) {
-      const message = formatActionError(err, "Something went wrong.");
+      const message = formatActionError(err, "发生错误，请稍后重试。");
       setCreateError(message);
       pushToast(message);
     } finally {
@@ -2039,7 +2059,7 @@ export default function BoardDetailPage() {
   const postBoardChatMessage = useCallback(
     async (content: string): Promise<{ ok: boolean; error: string | null }> => {
       if (!isSignedIn || !boardId) {
-        return { ok: false, error: "Sign in to send messages." };
+        return { ok: false, error: "请先登录后发送消息。" };
       }
       const trimmed = content.trim();
       if (!trimmed) return { ok: false, error: null };
@@ -2054,7 +2074,7 @@ export default function BoardDetailPage() {
           },
         );
         if (result.status !== 200) {
-          throw new Error("Unable to send message.");
+          throw new Error("无法发送消息。");
         }
         const created = result.data;
         if (created.tags?.includes("chat")) {
@@ -2073,7 +2093,7 @@ export default function BoardDetailPage() {
         }
         return { ok: true, error: null };
       } catch (err) {
-        const message = formatActionError(err, "Unable to send message.");
+        const message = formatActionError(err, "无法发送消息。");
         return { ok: false, error: message };
       }
     },
@@ -2116,7 +2136,7 @@ export default function BoardDetailPage() {
     try {
       const result = await postBoardChatMessage(command);
       if (!result.ok) {
-        const message = result.error ?? `Unable to send ${command} command.`;
+        const message = result.error ?? `无法发送 ${command} 指令。`;
         setAgentsControlError(message);
         pushToast(message);
         return;
@@ -2208,7 +2228,7 @@ export default function BoardDetailPage() {
       .filter((task) => task.id !== selectedTask.id)
       .map((task) => ({
         value: task.id,
-        label: `${task.title} (${task.status.replace(/_/g, " ")})`,
+        label: `${task.title} (${taskStatusLabel(task.status)})`,
         disabled: alreadySelected.has(task.id),
       }));
   }, [editDependsOnTaskIds, selectedTask, tasks]);
@@ -2373,11 +2393,11 @@ export default function BoardDetailPage() {
             boardId,
             taskId,
           );
-        if (result.status !== 200) throw new Error("Unable to load comments.");
+        if (result.status !== 200) throw new Error("无法加载评论。");
         setComments(mergeCommentsById(result.data.items ?? []));
       } catch (err) {
         setCommentsError(
-          err instanceof Error ? err.message : "Something went wrong.",
+          err instanceof Error ? err.message : "发生错误，请稍后重试。",
         );
       } finally {
         setIsCommentsLoading(false);
@@ -2426,9 +2446,7 @@ export default function BoardDetailPage() {
     );
     return (selectedTask.depends_on_task_ids ?? []).map((dependencyId) => {
       const dependencyTask = taskById.get(dependencyId);
-      const statusLabel = dependencyTask?.status
-        ? dependencyTask.status.replace(/_/g, " ")
-        : "unknown";
+      const statusLabel = taskStatusLabel(dependencyTask?.status);
       return {
         id: dependencyId,
         title: dependencyTask?.title ?? dependencyId,
@@ -2452,9 +2470,7 @@ export default function BoardDetailPage() {
     return tasks
       .filter((task) => task.depends_on_task_ids?.includes(selectedTask.id))
       .map((task) => {
-        const statusLabel = task.status
-          ? task.status.replace(/_/g, " ")
-          : "unknown";
+        const statusLabel = taskStatusLabel(task.status);
         return {
           id: task.id,
           title: task.title,
@@ -2599,7 +2615,7 @@ export default function BoardDetailPage() {
     if (!selectedTask || !boardId || !isSignedIn) return false;
     const trimmed = message.trim();
     if (!trimmed) {
-      setPostCommentError("Write a message before sending.");
+      setPostCommentError("发送前请先输入消息。");
       return false;
     }
     setIsPostingComment(true);
@@ -2611,12 +2627,12 @@ export default function BoardDetailPage() {
           selectedTask.id,
           { message: trimmed },
         );
-      if (result.status !== 200) throw new Error("Unable to send message.");
+      if (result.status !== 200) throw new Error("无法发送消息。");
       const created = result.data;
       setComments((prev) => mergeCommentsById([created], prev));
       return true;
     } catch (err) {
-      const message = formatActionError(err, "Unable to send message.");
+      const message = formatActionError(err, "无法发送消息。");
       setPostCommentError(message);
       pushToast(message);
       return false;
@@ -2629,7 +2645,7 @@ export default function BoardDetailPage() {
     if (!selectedTask || !isSignedIn || !boardId) return;
     const trimmedTitle = editTitle.trim();
     if (!trimmedTitle) {
-      setSaveTaskError("Title is required.");
+      setSaveTaskError("标题不能为空。");
       return;
     }
     const currentTaskCustomFieldValues = boardCustomFieldValues(
@@ -2656,7 +2672,7 @@ export default function BoardDetailPage() {
     );
     if (missingRequiredCustomField) {
       setSaveTaskError(
-        `Custom field "${missingRequiredCustomField}" is required.`,
+        `自定义字段“${missingRequiredCustomField}”为必填。`,
       );
       return;
     }
@@ -2712,14 +2728,14 @@ export default function BoardDetailPage() {
           .join(", ");
         setSaveTaskError(
           blockedTitles
-            ? `${result.data.detail.message} Blocked by: ${blockedTitles}`
+            ? `${result.data.detail.message} 被阻塞于：${blockedTitles}`
             : result.data.detail.message,
         );
         return;
       }
       if (result.status === 422) {
         setSaveTaskError(
-          result.data.detail?.[0]?.msg ?? "Validation error while saving task.",
+          result.data.detail?.[0]?.msg ?? "保存任务时校验失败。",
         );
         return;
       }
@@ -2745,7 +2761,7 @@ export default function BoardDetailPage() {
         setIsEditDialogOpen(false);
       }
     } catch (err) {
-      const message = formatActionError(err, "Something went wrong.");
+      const message = formatActionError(err, "发生错误，请稍后重试。");
       setSaveTaskError(message);
       pushToast(message);
     } finally {
@@ -2781,12 +2797,12 @@ export default function BoardDetailPage() {
         boardId,
         selectedTask.id,
       );
-      if (result.status !== 200) throw new Error("Unable to delete task.");
+      if (result.status !== 200) throw new Error("无法删除任务。");
       setTasks((prev) => prev.filter((task) => task.id !== selectedTask.id));
       setIsDeleteDialogOpen(false);
       closeComments();
     } catch (err) {
-      const message = formatActionError(err, "Something went wrong.");
+      const message = formatActionError(err, "发生错误，请稍后重试。");
       setDeleteTaskError(message);
       pushToast(message);
     } finally {
@@ -2800,7 +2816,7 @@ export default function BoardDetailPage() {
       const currentTask = tasksRef.current.find((task) => task.id === taskId);
       if (!currentTask || currentTask.status === status) return;
       if (currentTask.is_blocked && status !== "inbox") {
-        setError("Task is blocked by incomplete dependencies.");
+        setError("任务被未完成依赖阻塞。");
         return;
       }
       const previousTasks = tasksRef.current;
@@ -2830,14 +2846,14 @@ export default function BoardDetailPage() {
             .join(", ");
           throw new Error(
             blockedTitles
-              ? `${result.data.detail.message} Blocked by: ${blockedTitles}`
+              ? `${result.data.detail.message} 被阻塞于：${blockedTitles}`
               : result.data.detail.message,
           );
         }
         if (result.status === 422) {
           throw new Error(
             result.data.detail?.[0]?.msg ??
-              "Validation error while moving task.",
+              "移动任务时校验失败。",
           );
         }
         const assignee = result.data.assigned_agent_id
@@ -2859,7 +2875,7 @@ export default function BoardDetailPage() {
         );
       } catch (err) {
         setTasks(previousTasks);
-        const message = formatActionError(err, "Unable to move task.");
+        const message = formatActionError(err, "无法移动任务。");
         setError(message);
         pushToast(message);
       }
@@ -2906,9 +2922,9 @@ export default function BoardDetailPage() {
         if (trimmed) return trimmed;
       }
     }
-    if (agent.is_board_lead) return "Board lead";
-    if (agent.is_gateway_main) return "Gateway main";
-    return "Agent";
+    if (agent.is_board_lead) return "看板负责人";
+    if (agent.is_gateway_main) return "网关主智能体";
+    return "智能体";
   };
 
   const formatTaskTimestamp = (value?: string | null) => {
@@ -3025,17 +3041,17 @@ export default function BoardDetailPage() {
     const role = approvalPayloadValue(payload, "role");
     const isAssign = approval.action_type.includes("assign");
     const rows: Array<{ label: string; value: string }> = [];
-    if (taskIds.length === 1) rows.push({ label: "Task", value: taskIds[0] });
+    if (taskIds.length === 1) rows.push({ label: "任务", value: taskIds[0] });
     if (taskIds.length > 1)
-      rows.push({ label: "Tasks", value: taskIds.join(", ") });
+      rows.push({ label: "任务", value: taskIds.join(", ") });
     if (isAssign) {
       rows.push({
-        label: "Assignee",
-        value: assignedAgentId ?? "Unassigned",
+        label: "执行人",
+        value: assignedAgentId ?? "未分配",
       });
     }
-    if (title) rows.push({ label: "Title", value: title });
-    if (role) rows.push({ label: "Role", value: role });
+    if (title) rows.push({ label: "标题", value: title });
+    if (role) rows.push({ label: "角色", value: role });
     return rows;
   };
 
@@ -3047,7 +3063,7 @@ export default function BoardDetailPage() {
       if (!isSignedIn || !boardId) return;
       if (!canWrite) {
         pushToast(
-          "Read-only access. You do not have permission to update approvals.",
+          "只读访问。你没有权限更新审批。",
         );
         return;
       }
@@ -3082,13 +3098,13 @@ export default function BoardDetailPage() {
     <DashboardShell>
       <SignedOut>
         <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl surface-panel p-10 text-center">
-          <p className="text-sm text-muted">Sign in to view boards.</p>
+          <p className="text-sm text-muted">请先登录后查看看板。</p>
           <SignInButton
             mode="modal"
             forceRedirectUrl="/boards"
             signUpForceRedirectUrl="/boards"
           >
-            <Button>Sign in</Button>
+            <Button>登录</Button>
           </SignInButton>
         </div>
       </SignedOut>
@@ -3105,15 +3121,15 @@ export default function BoardDetailPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <h1 className="mt-2 text-2xl font-semibold text-slate-900 tracking-tight">
-                    {board?.name ?? "Board"}
+                    {board?.name ?? "看板"}
                   </h1>
                   <p className="mt-1 text-sm text-slate-500">
-                    Keep tasks moving through your workflow.
+                    让任务在你的流程中持续推进。
                   </p>
                   {isBoardLeadProvisioning ? (
                     <div className="mt-3 inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-800">
                       <RefreshCcw className="h-3.5 w-3.5 animate-spin" />
-                      <span>Provisioning board lead…</span>
+                      <span>正在配置看板负责人…</span>
                     </div>
                   ) : null}
                 </div>
@@ -3128,7 +3144,7 @@ export default function BoardDetailPage() {
                       )}
                       onClick={() => setViewMode("board")}
                     >
-                      Board
+                      看板
                     </button>
                     <button
                       className={cn(
@@ -3139,14 +3155,14 @@ export default function BoardDetailPage() {
                       )}
                       onClick={() => setViewMode("list")}
                     >
-                      List
+                      列表
                     </button>
                   </div>
                   <Button
                     onClick={() => setIsDialogOpen(true)}
                     className="h-9 w-9 p-0"
-                    aria-label="New task"
-                    title={canWrite ? "New task" : "Read-only access"}
+                    aria-label="新建任务"
+                    title={canWrite ? "新建任务" : "只读访问"}
                     disabled={!canWrite}
                   >
                     <Plus className="h-4 w-4" />
@@ -3155,8 +3171,8 @@ export default function BoardDetailPage() {
                     variant="outline"
                     onClick={() => router.push(`/boards/${boardId}/approvals`)}
                     className="relative h-9 w-9 p-0"
-                    aria-label="Approvals"
-                    title="Approvals"
+                    aria-label="审批"
+                    title="审批"
                   >
                     <ShieldCheck className="h-4 w-4" />
                     {pendingApprovals.length > 0 ? (
@@ -3186,14 +3202,14 @@ export default function BoardDetailPage() {
                           : "",
                       )}
                       aria-label={
-                        isAgentsPaused ? "Resume agents" : "Pause agents"
+                        isAgentsPaused ? "恢复智能体" : "暂停智能体"
                       }
                       title={
                         canWrite
                           ? isAgentsPaused
-                            ? "Resume agents"
-                            : "Pause agents"
-                          : "Read-only access"
+                            ? "恢复智能体"
+                            : "暂停智能体"
+                          : "只读访问"
                       }
                     >
                       {isAgentsPaused ? (
@@ -3207,8 +3223,8 @@ export default function BoardDetailPage() {
                     variant="outline"
                     onClick={openBoardChat}
                     className="h-9 w-9 p-0"
-                    aria-label="Board chat"
-                    title="Board chat"
+                    aria-label="看板聊天"
+                    title="看板聊天"
                   >
                     <MessageSquare className="h-4 w-4" />
                   </Button>
@@ -3216,8 +3232,8 @@ export default function BoardDetailPage() {
                     variant="outline"
                     onClick={openLiveFeed}
                     className="h-9 w-9 p-0"
-                    aria-label="Live feed"
-                    title="Live feed"
+                    aria-label="动态流"
+                    title="动态流"
                   >
                     <Activity className="h-4 w-4" />
                   </Button>
@@ -3226,8 +3242,8 @@ export default function BoardDetailPage() {
                       type="button"
                       onClick={() => router.push(`/boards/${boardId}/edit`)}
                       className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-slate-300 hover:bg-slate-50"
-                      aria-label="Board settings"
-                      title="Board settings"
+                      aria-label="看板设置"
+                      title="看板设置"
                     >
                       <Settings className="h-4 w-4" />
                     </button>
@@ -3243,10 +3259,10 @@ export default function BoardDetailPage() {
                 <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Agents
+                      智能体
                     </p>
                     <p className="text-xs text-slate-400">
-                      {sortedAgents.length} total
+                      共 {sortedAgents.length} 个
                     </p>
                   </div>
                   <button
@@ -3254,13 +3270,13 @@ export default function BoardDetailPage() {
                     onClick={() => router.push("/agents/new")}
                     className="rounded-md border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50"
                   >
-                    Add
+                    添加
                   </button>
                 </div>
                 <div className="flex-1 space-y-2 overflow-y-auto p-3">
                   {sortedAgents.length === 0 ? (
                     <div className="rounded-lg border border-dashed border-slate-200 p-3 text-xs text-slate-500">
-                      No agents assigned yet.
+                      暂无分配智能体。
                     </div>
                   ) : (
                     sortedAgents.map((agent) => {
@@ -3310,7 +3326,7 @@ export default function BoardDetailPage() {
 
               {isLoading ? (
                 <div className="flex min-h-[50vh] items-center justify-center text-sm text-slate-500">
-                  Loading {titleLabel}…
+                  正在加载 {titleLabel}…
                 </div>
               ) : (
                 <>
@@ -3328,7 +3344,7 @@ export default function BoardDetailPage() {
                             <div className="flex flex-wrap items-center justify-between gap-3">
                               <div className="min-w-0">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                  Related boards
+                                  关联看板
                                 </p>
                                 <p className="mt-1 truncate text-sm font-semibold text-slate-900">
                                   {groupSnapshot.group.name}
@@ -3350,7 +3366,7 @@ export default function BoardDetailPage() {
                                   }
                                   disabled={!groupSnapshot.group?.id}
                                 >
-                                  View group
+                                  查看分组
                                 </Button>
                                 {isOrgAdmin ? (
                                   <Button
@@ -3361,7 +3377,7 @@ export default function BoardDetailPage() {
                                     }
                                     disabled={!boardId}
                                   >
-                                    Settings
+                                    设置
                                   </Button>
                                 ) : null}
                               </div>
@@ -3388,7 +3404,7 @@ export default function BoardDetailPage() {
                                           {item.board.name}
                                         </p>
                                         <p className="mt-1 text-xs text-slate-500">
-                                          Updated{" "}
+                                          已更新{" "}
                                           {formatTaskTimestamp(
                                             item.board.updated_at,
                                           )}
@@ -3399,14 +3415,14 @@ export default function BoardDetailPage() {
 
                                     <div className="mt-3 flex flex-wrap gap-2 text-xs">
                                       <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-700">
-                                        Inbox {item.task_counts?.inbox ?? 0}
+                                        收件箱 {item.task_counts?.inbox ?? 0}
                                       </span>
                                       <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-700">
-                                        In progress{" "}
+                                        进行中{" "}
                                         {item.task_counts?.in_progress ?? 0}
                                       </span>
                                       <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-slate-700">
-                                        Review {item.task_counts?.review ?? 0}
+                                        评审 {item.task_counts?.review ?? 0}
                                       </span>
                                     </div>
 
@@ -3453,9 +3469,9 @@ export default function BoardDetailPage() {
                                               </p>
                                             </div>
                                             <p className="mt-2 truncate text-xs text-slate-600">
-                                              Assignee:{" "}
+                                              负责人：{" "}
                                               <span className="font-medium text-slate-900">
-                                                {task.assignee ?? "Unassigned"}
+                                                {task.assignee ?? "未分配"}
                                               </span>
                                             </p>
                                             {task.tags?.length ? (
@@ -3484,13 +3500,13 @@ export default function BoardDetailPage() {
                                         ))}
                                         {item.tasks.length > 3 ? (
                                           <li className="text-xs text-slate-500">
-                                            +{item.tasks.length - 3} more…
+                                            +{item.tasks.length - 3} 项更多…
                                           </li>
                                         ) : null}
                                       </ul>
                                     ) : (
                                       <p className="mt-3 text-sm text-slate-500">
-                                        No tasks in this snapshot.
+                                        当前快照暂无任务。
                                       </p>
                                     )}
                                   </div>
@@ -3498,7 +3514,7 @@ export default function BoardDetailPage() {
                               </div>
                             ) : (
                               <p className="text-sm text-slate-500">
-                                No other boards in this group yet.
+                                该分组下暂无其他看板。
                               </p>
                             )}
                           </div>
@@ -3506,11 +3522,10 @@ export default function BoardDetailPage() {
                       ) : groupSnapshot ? (
                         <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
                           <p className="font-semibold text-slate-900">
-                            No board group configured
+                            未配置看板分组
                           </p>
                           <p className="mt-1 text-sm text-slate-600">
-                            Assign this board to a group to give agents
-                            visibility into related work.
+                            将此看板加入分组，让智能体可见相关协作工作。
                           </p>
                           <div className="mt-3 flex flex-wrap gap-2">
                             <Button
@@ -3521,14 +3536,14 @@ export default function BoardDetailPage() {
                               }
                               disabled={!boardId}
                             >
-                              Open settings
+                              打开设置
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => router.push("/board-groups")}
                             >
-                              View groups
+                              查看分组
                             </Button>
                           </div>
                         </div>
@@ -3549,10 +3564,10 @@ export default function BoardDetailPage() {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-semibold text-slate-900">
-                              All tasks
+                              全部任务
                             </p>
                             <p className="text-xs text-slate-500">
-                              {tasks.length} tasks in this board
+                              看板内共 {tasks.length} 项任务
                             </p>
                           </div>
                           <Button
@@ -3560,16 +3575,16 @@ export default function BoardDetailPage() {
                             size="sm"
                             onClick={() => setIsDialogOpen(true)}
                             disabled={isCreating || !canWrite}
-                            title={canWrite ? "New task" : "Read-only access"}
+                            title={canWrite ? "新建任务" : "只读访问"}
                           >
-                            New task
+                            新建任务
                           </Button>
                         </div>
                       </div>
                       <div className="divide-y divide-slate-100">
                         {tasks.length === 0 ? (
                           <div className="px-5 py-8 text-sm text-slate-500">
-                            No tasks yet. Create your first task to get started.
+                            暂无任务。创建第一条任务开始协作。
                           </div>
                         ) : (
                           tasks.map((task) => (
@@ -3590,14 +3605,14 @@ export default function BoardDetailPage() {
                                           .toString()
                                           .trim()
                                           .slice(0, 120)
-                                      : "No description"}
+                                      : "暂无描述"}
                                   </p>
                                 </div>
                                 <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
                                   {task.approvals_pending_count ? (
                                     <span className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wide text-amber-700">
                                       <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                                      Approval needed ·{" "}
+                                      需要审批 · {" "}
                                       {task.approvals_pending_count}
                                     </span>
                                   ) : null}
@@ -3643,7 +3658,7 @@ export default function BoardDetailPage() {
                                     </div>
                                   ) : null}
                                   <span className="text-xs text-slate-500">
-                                    {task.assignee ?? "Unassigned"}
+                                    {task.assignee ?? "未分配"}
                                   </span>
                                   <span className="text-xs text-slate-500">
                                     {formatTaskTimestamp(
@@ -3688,10 +3703,10 @@ export default function BoardDetailPage() {
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 md:px-6 md:py-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Task detail
+                任务详情
               </p>
               <p className="mt-1 text-sm font-medium text-slate-900">
-                {selectedTask?.title ?? "Task"}
+                {selectedTask?.title ?? "任务"}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -3700,7 +3715,7 @@ export default function BoardDetailPage() {
                 onClick={() => setIsEditDialogOpen(true)}
                 className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50"
                 disabled={!selectedTask || !canWrite}
-                title={canWrite ? "Edit task" : "Read-only access"}
+                title={canWrite ? "编辑任务" : "只读访问"}
               >
                 <Pencil className="h-4 w-4" />
               </button>
@@ -3716,7 +3731,7 @@ export default function BoardDetailPage() {
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Description
+                描述
               </p>
               {selectedTask?.description ? (
                 <div className="prose prose-sm max-w-none text-slate-700">
@@ -3727,16 +3742,16 @@ export default function BoardDetailPage() {
                 </div>
               ) : (
                 <p className="text-sm text-slate-500">
-                  No description provided.
+                  暂无描述。
                 </p>
               )}
             </div>
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Custom fields
+                自定义字段
               </p>
               {customFieldDefinitionsQuery.isLoading ? (
-                <p className="text-sm text-slate-500">Loading custom fields…</p>
+                <p className="text-sm text-slate-500">正在加载自定义字段…</p>
               ) : boardCustomFieldDefinitions.length > 0 ? (
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                   <dl className="space-y-2">
@@ -3766,12 +3781,12 @@ export default function BoardDetailPage() {
                   </dl>
                 </div>
               ) : (
-                <p className="text-sm text-slate-500">No custom fields.</p>
+                <p className="text-sm text-slate-500">暂无自定义字段。</p>
               )}
             </div>
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Tags
+                标签
               </p>
               {selectedTask?.tags?.length ? (
                 <div className="flex flex-wrap gap-2">
@@ -3791,12 +3806,12 @@ export default function BoardDetailPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-slate-500">No tags assigned.</p>
+                <p className="text-sm text-slate-500">暂无标签。</p>
               )}
             </div>
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Dependencies
+                依赖关系
               </p>
               {(() => {
                 const hasDependencies =
@@ -3818,18 +3833,18 @@ export default function BoardDetailPage() {
                     : selectedTaskResolvedDependencies;
                 const childrenMessage =
                   hasDependencies && selectedTask?.is_blocked
-                    ? "Blocked by incomplete dependencies."
+                    ? "存在未完成依赖，任务已阻塞。"
                     : hasDependencies
-                      ? "Dependencies resolved."
+                      ? "依赖已全部满足。"
                       : hasResolvedDependencies
-                        ? "This task resolves these tasks."
+                        ? "该任务正在解除以下任务的阻塞。"
                         : null;
 
                 return (
                   <DependencyBanner
                     dependencies={displayedDependencies}
                     variant={bannerVariant}
-                    emptyMessage="No dependencies."
+                    emptyMessage="暂无依赖。"
                   >
                     {childrenMessage}
                   </DependencyBanner>
@@ -3839,14 +3854,14 @@ export default function BoardDetailPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Approvals
+                  审批
                 </p>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => router.push(`/boards/${boardId}/approvals`)}
                 >
-                  View all
+                  查看全部
                 </Button>
               </div>
               {approvalsError ? (
@@ -3854,13 +3869,13 @@ export default function BoardDetailPage() {
                   {approvalsError}
                 </div>
               ) : isApprovalsLoading ? (
-                <p className="text-sm text-slate-500">Loading approvals…</p>
+                <p className="text-sm text-slate-500">正在加载审批…</p>
               ) : taskApprovals.length === 0 ? (
                 <p className="text-sm text-slate-500">
-                  No approvals tied to this task.{" "}
+                  当前任务暂无关联审批。{" "}
                   {pendingApprovals.length > 0
-                    ? `${pendingApprovals.length} pending on this board.`
-                    : "No pending approvals on this board."}
+                    ? `当前看板还有 ${pendingApprovals.length} 条待处理审批。`
+                    : "当前看板暂无待处理审批。"}
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -3875,12 +3890,12 @@ export default function BoardDetailPage() {
                             {humanizeApprovalAction(approval.action_type)}
                           </p>
                           <p className="mt-1 text-xs text-slate-500">
-                            Requested{" "}
+                            发起于{" "}
                             {formatApprovalTimestamp(approval.created_at)}
                           </p>
                         </div>
                         <span className="text-xs font-semibold text-slate-700">
-                          {approval.confidence}% confidence · {approval.status}
+                          {approval.confidence}% 置信度 · {approval.status}
                         </span>
                       </div>
                       {approvalRows(approval).length > 0 ? (
@@ -3912,9 +3927,9 @@ export default function BoardDetailPage() {
                             disabled={
                               approvalsUpdatingId === approval.id || !canWrite
                             }
-                            title={canWrite ? "Approve" : "Read-only access"}
+                            title={canWrite ? "通过" : "只读访问"}
                           >
-                            Approve
+                            通过
                           </Button>
                           <Button
                             variant="outline"
@@ -3925,10 +3940,10 @@ export default function BoardDetailPage() {
                             disabled={
                               approvalsUpdatingId === approval.id || !canWrite
                             }
-                            title={canWrite ? "Reject" : "Read-only access"}
+                            title={canWrite ? "拒绝" : "只读访问"}
                             className="border-slate-300 text-slate-700"
                           >
-                            Reject
+                            拒绝
                           </Button>
                         </div>
                       ) : null}
@@ -3939,14 +3954,14 @@ export default function BoardDetailPage() {
             </div>
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Comments
+                评论
               </p>
               <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <BoardChatComposer
                   placeholder={
                     canWrite
-                      ? "Write a message for the assigned agent. Tag @lead or @name."
-                      : "Read-only access. Comments are disabled."
+                      ? "给负责智能体留言。可用 @lead 或 @name 提及。"
+                      : "只读访问，评论已禁用。"
                   }
                   isSending={isPostingComment}
                   onSend={handlePostComment}
@@ -3958,18 +3973,18 @@ export default function BoardDetailPage() {
                 ) : null}
                 {!canWrite ? (
                   <p className="text-xs text-slate-500">
-                    Read-only access. You cannot post comments on this board.
+                    只读访问。你无法在此看板发表评论。
                   </p>
                 ) : null}
               </div>
               {isCommentsLoading ? (
-                <p className="text-sm text-slate-500">Loading comments…</p>
+                <p className="text-sm text-slate-500">正在加载评论…</p>
               ) : commentsError ? (
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500">
                   {commentsError}
                 </div>
               ) : comments.length === 0 ? (
-                <p className="text-sm text-slate-500">No comments yet.</p>
+                <p className="text-sm text-slate-500">暂无评论。</p>
               ) : (
                 <div className="space-y-3">
                   {comments.map((comment) => (
@@ -3979,7 +3994,7 @@ export default function BoardDetailPage() {
                       isHighlighted={highlightedCommentId === comment.id}
                       authorLabel={
                         comment.agent_id
-                          ? (assigneeById.get(comment.agent_id) ?? "Agent")
+                          ? (assigneeById.get(comment.agent_id) ?? "智能体")
                           : currentUserDisplayName
                       }
                     />
@@ -4001,17 +4016,17 @@ export default function BoardDetailPage() {
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 md:px-6 md:py-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Board chat
+                看板聊天
               </p>
               <p className="mt-1 text-sm font-medium text-slate-900">
-                Talk to the lead agent. Tag others with @name.
+                与主智能体对话，也可用 @name 提及其他成员。
               </p>
             </div>
             <button
               type="button"
               onClick={closeBoardChat}
               className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50"
-              aria-label="Close board chat"
+              aria-label="关闭看板聊天"
             >
               <X className="h-4 w-4" />
             </button>
@@ -4025,7 +4040,7 @@ export default function BoardDetailPage() {
               ) : null}
               {chatMessages.length === 0 ? (
                 <p className="text-sm text-slate-500">
-                  No messages yet. Start the conversation with your lead agent.
+                  暂无消息。与主智能体开始第一条对话吧。
                 </p>
               ) : (
                 chatMessages.map((message) => (
@@ -4045,8 +4060,8 @@ export default function BoardDetailPage() {
               mentionSuggestions={boardChatMentionSuggestions}
               placeholder={
                 canWrite
-                  ? "Message the board lead. Tag agents with @name."
-                  : "Read-only access. Chat is disabled."
+                  ? "给看板主智能体发消息，可用 @name 提及其他智能体。"
+                  : "只读访问，聊天已禁用。"
               }
             />
           </div>
@@ -4063,31 +4078,31 @@ export default function BoardDetailPage() {
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 md:px-6 md:py-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Live feed
+                动态流
               </p>
               <p className="mt-1 text-sm font-medium text-slate-900">
-                Realtime task, approval, agent, and board-chat activity.
+                实时展示任务、审批、智能体与看板聊天动态。
               </p>
             </div>
             <button
               type="button"
               onClick={closeLiveFeed}
               className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50"
-              aria-label="Close live feed"
+              aria-label="关闭动态流"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-6 py-4">
             {isLiveFeedHistoryLoading && orderedLiveFeed.length === 0 ? (
-              <p className="text-sm text-slate-500">Loading feed…</p>
+              <p className="text-sm text-slate-500">正在加载动态流…</p>
             ) : liveFeedHistoryError ? (
               <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-700 shadow-sm">
                 {liveFeedHistoryError}
               </div>
             ) : orderedLiveFeed.length === 0 ? (
               <p className="text-sm text-slate-500">
-                Waiting for new activity…
+                等待新动态…
               </p>
             ) : (
               <div className="space-y-3">
@@ -4118,8 +4133,8 @@ export default function BoardDetailPage() {
                         item.title
                           ? item.title
                           : taskId
-                            ? (taskTitleById.get(taskId) ?? "Unknown task")
-                            : "Activity"
+                            ? (taskTitleById.get(taskId) ?? "未知任务")
+                            : "动态"
                       }
                       authorName={authorName}
                       authorRole={authorRole}
@@ -4137,40 +4152,40 @@ export default function BoardDetailPage() {
       </aside>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent aria-label="Edit task">
+        <DialogContent aria-label="编辑任务">
           <DialogHeader>
-            <DialogTitle>Edit task</DialogTitle>
+            <DialogTitle>编辑任务</DialogTitle>
             <DialogDescription>
-              Update task details, priority, status, or assignment.
+              修改任务详情、优先级、状态或负责人。
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Title
+                标题
               </label>
               <Input
                 value={editTitle}
                 onChange={(event) => setEditTitle(event.target.value)}
-                placeholder="Task title"
+                placeholder="任务标题"
                 disabled={!selectedTask || isSavingTask || !canWrite}
               />
             </div>
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Description
+                描述
               </label>
               <Textarea
                 value={editDescription}
                 onChange={(event) => setEditDescription(event.target.value)}
-                placeholder="Task details"
+                placeholder="任务详情"
                 className="min-h-[140px]"
                 disabled={!selectedTask || isSavingTask || !canWrite}
               />
             </div>
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Custom fields
+                自定义字段
               </label>
               <TaskCustomFieldsEditor
                 definitions={boardCustomFieldDefinitions}
@@ -4183,7 +4198,7 @@ export default function BoardDetailPage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Status
+                  状态
                 </label>
                 <Select
                   value={editStatus}
@@ -4191,7 +4206,7 @@ export default function BoardDetailPage() {
                   disabled={!selectedTask || isSavingTask || !canWrite}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder="选择状态" />
                   </SelectTrigger>
                   <SelectContent>
                     {statusOptions.map((option) => (
@@ -4204,7 +4219,7 @@ export default function BoardDetailPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Priority
+                  优先级
                 </label>
                 <Select
                   value={editPriority}
@@ -4212,7 +4227,7 @@ export default function BoardDetailPage() {
                   disabled={!selectedTask || isSavingTask || !canWrite}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select priority" />
+                    <SelectValue placeholder="选择优先级" />
                   </SelectTrigger>
                   <SelectContent>
                     {priorities.map((option) => (
@@ -4225,7 +4240,7 @@ export default function BoardDetailPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Due date
+                  截止日期
                 </label>
                 <Input
                   type="date"
@@ -4237,7 +4252,7 @@ export default function BoardDetailPage() {
             </div>
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Assignee
+                负责人
               </label>
               <Select
                 value={editAssigneeId || "unassigned"}
@@ -4247,10 +4262,10 @@ export default function BoardDetailPage() {
                 disabled={!selectedTask || isSavingTask || !canWrite}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Unassigned" />
+                  <SelectValue placeholder="未分配" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="unassigned">Unassigned</SelectItem>
+                  <SelectItem value="unassigned">未分配</SelectItem>
                   {assignableAgents.map((agent) => (
                     <SelectItem key={agent.id} value={agent.id}>
                       {agent.name}
@@ -4260,33 +4275,33 @@ export default function BoardDetailPage() {
               </Select>
               {assignableAgents.length === 0 ? (
                 <p className="text-xs text-slate-500">
-                  Add agents to assign tasks.
+                  先添加智能体后才能分配任务。
                 </p>
               ) : null}
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Tags
+                  标签
                 </label>
                 <button
                   type="button"
                   onClick={() => router.push("/tags")}
                   className="text-xs font-medium text-slate-500 underline underline-offset-2 transition hover:text-slate-700"
                 >
-                  Manage tags
+                  管理标签
                 </button>
               </div>
               <DropdownSelect
-                ariaLabel="Add tag"
-                placeholder="Add tag"
+                ariaLabel="添加标签"
+                placeholder="添加标签"
                 options={editTagOptions}
                 onValueChange={addEditTag}
                 disabled={!selectedTask || isSavingTask || !canWrite}
-                emptyMessage="No tags configured."
+                emptyMessage="未配置标签。"
               />
               {editTagIds.length === 0 ? (
-                <p className="text-xs text-slate-500">No tags assigned.</p>
+                <p className="text-xs text-slate-500">暂无标签。</p>
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {editTagIds.map((tagId) => {
@@ -4312,7 +4327,7 @@ export default function BoardDetailPage() {
                               ? "hover:bg-white hover:text-slate-700"
                               : "opacity-50 cursor-not-allowed",
                           )}
-                          aria-label="Remove tag"
+                          aria-label="移除标签"
                           disabled={!canWrite}
                         >
                           <X className="h-3 w-3" />
@@ -4325,14 +4340,14 @@ export default function BoardDetailPage() {
             </div>
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Dependencies
+                依赖关系
               </label>
               <p className="text-xs text-slate-500">
-                Tasks stay blocked until every dependency is marked done.
+                所有依赖完成前，任务会保持阻塞。
               </p>
               <DropdownSelect
-                ariaLabel="Add dependency"
-                placeholder="Add dependency"
+                ariaLabel="添加依赖"
+                placeholder="添加依赖"
                 options={dependencyOptions}
                 onValueChange={addTaskDependency}
                 disabled={
@@ -4341,15 +4356,15 @@ export default function BoardDetailPage() {
                   selectedTask.status === "done" ||
                   !canWrite
                 }
-                emptyMessage="No other tasks found."
+                emptyMessage="未找到其他任务。"
               />
               {selectedTask?.status === "done" ? (
                 <p className="text-xs text-slate-500">
-                  Dependencies can only be edited until the task is done.
+                  仅可在任务完成前编辑依赖关系。
                 </p>
               ) : null}
               {editDependsOnTaskIds.length === 0 ? (
-                <p className="text-xs text-slate-500">No dependencies.</p>
+                <p className="text-xs text-slate-500">暂无依赖。</p>
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {editDependsOnTaskIds.map((depId) => {
@@ -4385,7 +4400,7 @@ export default function BoardDetailPage() {
                                 ? "hover:bg-white hover:text-slate-700"
                                 : "opacity-50 cursor-not-allowed",
                             )}
-                            aria-label="Remove dependency"
+                            aria-label="移除依赖"
                             disabled={!canWrite}
                           >
                             <X className="h-3 w-3" />
@@ -4409,9 +4424,9 @@ export default function BoardDetailPage() {
               onClick={() => setIsDeleteDialogOpen(true)}
               disabled={!selectedTask || isSavingTask || !canWrite}
               className="border-rose-200 text-rose-600 hover:border-rose-300 hover:text-rose-700"
-              title={canWrite ? "Delete task" : "Read-only access"}
+              title={canWrite ? "删除任务" : "只读访问"}
             >
-              Delete task
+              删除任务
             </Button>
             <Button
               variant="outline"
@@ -4420,7 +4435,7 @@ export default function BoardDetailPage() {
                 !selectedTask || isSavingTask || !hasTaskChanges || !canWrite
               }
             >
-              Reset
+              重置
             </Button>
             <Button
               onClick={() => handleTaskSave(true)}
@@ -4428,18 +4443,18 @@ export default function BoardDetailPage() {
                 !selectedTask || isSavingTask || !hasTaskChanges || !canWrite
               }
             >
-              {isSavingTask ? "Saving…" : "Save changes"}
+              {isSavingTask ? "保存中…" : "保存更改"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent aria-label="Delete task">
+        <DialogContent aria-label="删除任务">
           <DialogHeader>
-            <DialogTitle>Delete task</DialogTitle>
+            <DialogTitle>删除任务</DialogTitle>
             <DialogDescription>
-              This removes the task permanently. This action cannot be undone.
+              该任务将被永久删除，且无法撤销。
             </DialogDescription>
           </DialogHeader>
           {deleteTaskError ? (
@@ -4453,14 +4468,14 @@ export default function BoardDetailPage() {
               onClick={() => setIsDeleteDialogOpen(false)}
               disabled={isDeletingTask}
             >
-              Cancel
+              取消
             </Button>
             <Button
               onClick={handleDeleteTask}
               disabled={isDeletingTask || !canWrite}
               className="bg-rose-600 text-white hover:bg-rose-700"
             >
-              {isDeletingTask ? "Deleting…" : "Delete task"}
+              {isDeletingTask ? "删除中…" : "删除任务"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -4477,36 +4492,36 @@ export default function BoardDetailPage() {
       >
         <DialogContent aria-label={titleLabel}>
           <DialogHeader>
-            <DialogTitle>New task</DialogTitle>
+            <DialogTitle>新建任务</DialogTitle>
             <DialogDescription>
-              Add a task to the inbox and triage it when you are ready.
+              添加任务到收件箱，之后可按需分派与处理。
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-strong">Title</label>
+              <label className="text-sm font-medium text-strong">标题</label>
               <Input
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
-                placeholder="e.g. Prepare launch notes"
+                placeholder="例如：准备发布说明"
                 disabled={!canWrite || isCreating}
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-strong">
-                Description
+                描述
               </label>
               <Textarea
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="Optional details"
+                placeholder="可选描述"
                 className="min-h-[120px]"
                 disabled={!canWrite || isCreating}
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-strong">
-                Custom fields
+                自定义字段
               </label>
               <TaskCustomFieldsEditor
                 definitions={boardCustomFieldDefinitions}
@@ -4518,7 +4533,7 @@ export default function BoardDetailPage() {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-strong">
-                Priority
+                优先级
               </label>
               <Select
                 value={priority}
@@ -4526,7 +4541,7 @@ export default function BoardDetailPage() {
                 disabled={!canWrite || isCreating}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder="选择优先级" />
                 </SelectTrigger>
                 <SelectContent>
                   {priorities.map((item) => (
@@ -4550,22 +4565,22 @@ export default function BoardDetailPage() {
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <label className="text-sm font-medium text-strong">Tags</label>
+                <label className="text-sm font-medium text-strong">标签</label>
                 <button
                   type="button"
                   onClick={() => router.push("/tags")}
                   className="text-xs font-medium text-slate-500 underline underline-offset-2 transition hover:text-slate-700"
                 >
-                  Manage tags
+                  管理标签
                 </button>
               </div>
               <DropdownSelect
-                ariaLabel="Add tag"
-                placeholder="Add tag"
+                ariaLabel="添加标签"
+                placeholder="添加标签"
                 options={createTagOptions}
                 onValueChange={addCreateTag}
                 disabled={!canWrite || isCreating}
-                emptyMessage="No tags configured."
+                emptyMessage="未配置标签。"
               />
               {createTagIds.length ? (
                 <div className="flex flex-wrap gap-2">
@@ -4586,7 +4601,7 @@ export default function BoardDetailPage() {
                           type="button"
                           onClick={() => removeCreateTag(tagId)}
                           className="rounded-full p-0.5 text-slate-500 transition hover:bg-white hover:text-slate-700"
-                          aria-label="Remove tag"
+                          aria-label="移除标签"
                           disabled={!canWrite || isCreating}
                         >
                           <X className="h-3 w-3" />
@@ -4596,7 +4611,7 @@ export default function BoardDetailPage() {
                   })}
                 </div>
               ) : (
-                <p className="text-xs text-slate-500">No tags assigned.</p>
+                <p className="text-xs text-slate-500">暂无标签。</p>
               )}
             </div>
             {createError ? (
@@ -4607,13 +4622,13 @@ export default function BoardDetailPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              取消
             </Button>
             <Button
               onClick={handleCreateTask}
               disabled={!canWrite || isCreating}
             >
-              {isCreating ? "Creating…" : "Create task"}
+              {isCreating ? "创建中…" : "创建任务"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -4629,17 +4644,17 @@ export default function BoardDetailPage() {
             }
           }}
         >
-          <DialogContent aria-label="Agent controls">
+          <DialogContent aria-label="智能体控制">
             <DialogHeader>
               <DialogTitle>
                 {agentsControlAction === "pause"
-                  ? "Pause agents"
-                  : "Resume agents"}
+                  ? "暂停智能体"
+                  : "恢复智能体"}
               </DialogTitle>
               <DialogDescription>
                 {agentsControlAction === "pause"
-                  ? "Send /pause to every agent on this board."
-                  : "Send /resume to every agent on this board."}
+                  ? "向当前看板全部智能体发送 /pause。"
+                  : "向当前看板全部智能体发送 /resume。"}
               </DialogDescription>
             </DialogHeader>
 
@@ -4650,18 +4665,16 @@ export default function BoardDetailPage() {
             ) : null}
 
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-              <p className="font-semibold text-slate-900">What happens</p>
+              <p className="font-semibold text-slate-900">执行说明</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 <li>
-                  This posts{" "}
+                  这会向看板聊天发送{" "}
                   <span className="font-mono">
                     {agentsControlAction === "pause" ? "/pause" : "/resume"}
-                  </span>{" "}
-                  to board chat.
+                  </span>
+                  。
                 </li>
-                <li>
-                  Mission Control forwards it to all agents on this board.
-                </li>
+                <li>Mission Control 会转发给当前看板的全部智能体。</li>
               </ul>
             </div>
 
@@ -4671,17 +4684,17 @@ export default function BoardDetailPage() {
                 onClick={() => setIsAgentsControlDialogOpen(false)}
                 disabled={isAgentsControlSending}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 onClick={handleConfirmAgentsControl}
                 disabled={isAgentsControlSending}
               >
                 {isAgentsControlSending
-                  ? "Sending…"
+                  ? "发送中…"
                   : agentsControlAction === "pause"
-                    ? "Pause agents"
-                    : "Resume agents"}
+                    ? "暂停智能体"
+                    : "恢复智能体"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -4713,7 +4726,7 @@ export default function BoardDetailPage() {
                   className="text-xs text-slate-400 hover:text-slate-600"
                   onClick={() => dismissToast(toast.id)}
                 >
-                  Dismiss
+                  关闭
                 </button>
               </div>
             </div>

@@ -20,13 +20,13 @@ export default function BoardApprovalsPage() {
     <DashboardShell>
       <SignedOut>
         <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl surface-panel p-10 text-center">
-          <p className="text-sm text-muted">Sign in to view approvals.</p>
+          <p className="text-sm text-muted">请先登录后查看审批。</p>
           <SignInButton
             mode="modal"
             forceRedirectUrl="/boards"
             signUpForceRedirectUrl="/boards"
           >
-            <Button>Sign in</Button>
+            <Button>登录</Button>
           </SignInButton>
         </div>
       </SignedOut>

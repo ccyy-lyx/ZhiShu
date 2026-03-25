@@ -31,7 +31,7 @@ export function BoardAccessTable({
     () => [
       {
         accessorKey: "name",
-        header: "Board",
+        header: "看板",
         cell: ({ row }) =>
           linkifyCell({
             href: `/boards/${row.original.id}`,
@@ -42,7 +42,7 @@ export function BoardAccessTable({
       },
       {
         id: "read",
-        header: "Read",
+        header: "读取",
         cell: ({ row }) => {
           const entry = access[row.original.id] ?? {
             read: false,
@@ -63,7 +63,7 @@ export function BoardAccessTable({
       },
       {
         id: "write",
-        header: "Write",
+        header: "写入",
         cell: ({ row }) => {
           const entry = access[row.original.id] ?? {
             read: false,

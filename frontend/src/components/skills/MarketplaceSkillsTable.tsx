@@ -122,7 +122,7 @@ export function MarketplaceSkillsTable({
     const baseColumns: ColumnDef<MarketplaceSkillCardRead>[] = [
       {
         accessorKey: "name",
-        header: "Skill",
+        header: "技能",
         cell: ({ row }) => (
           <div>
             {onSkillClick ? (
@@ -140,16 +140,16 @@ export function MarketplaceSkillsTable({
             )}
             <p
               className="mt-1 line-clamp-2 text-xs text-slate-500"
-              title={row.original.description || "No description provided."}
+              title={row.original.description || "暂无描述。"}
             >
-              {row.original.description || "No description provided."}
+              {row.original.description || "暂无描述。"}
             </p>
           </div>
         ),
       },
       {
         accessorKey: "source_url",
-        header: "Pack",
+        header: "来源包",
         cell: ({ row }) => {
           const packUrl = packUrlFromSkillSourceUrl(row.original.source_url);
           return (
@@ -164,16 +164,16 @@ export function MarketplaceSkillsTable({
       },
       {
         accessorKey: "category",
-        header: "Category",
+        header: "分类",
         cell: ({ row }) => (
           <span className="text-sm text-slate-700">
-            {row.original.category || "uncategorized"}
+            {row.original.category || "未分类"}
           </span>
         ),
       },
       {
         accessorKey: "risk",
-        header: "Risk",
+        header: "风险",
         cell: ({ row }) => (
           <Badge
             variant={riskBadgeVariant(row.original.risk)}
@@ -185,12 +185,12 @@ export function MarketplaceSkillsTable({
       },
       {
         accessorKey: "source",
-        header: "Source",
+        header: "来源",
         cell: ({ row }) => {
           const sourceHref = row.original.source || row.original.source_url;
 
           if (!sourceHref) {
-            return <span className="text-sm text-slate-400">No source</span>;
+            return <span className="text-sm text-slate-400">无来源</span>;
           }
 
           return (
@@ -208,7 +208,7 @@ export function MarketplaceSkillsTable({
       },
       {
         id: "installed_on",
-        header: "Installed On",
+        header: "已安装到",
         enableSorting: false,
         cell: ({ row }) => {
           const installedOn =
@@ -242,7 +242,7 @@ export function MarketplaceSkillsTable({
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
       {
@@ -256,7 +256,7 @@ export function MarketplaceSkillsTable({
                 href={getEditHref(row.original)}
                 className={buttonVariants({ variant: "ghost", size: "sm" })}
               >
-                Edit
+                编辑
               </Link>
             ) : null}
             {onDelete ? (
@@ -267,7 +267,7 @@ export function MarketplaceSkillsTable({
                 onClick={() => onDelete(row.original)}
                 disabled={isMutating}
               >
-                Delete
+                删除
               </Button>
             ) : null}
           </div>

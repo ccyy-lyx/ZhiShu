@@ -38,7 +38,7 @@ function InviteContent() {
           }
         },
         onError: (err) => {
-          setError(err.message || "Unable to accept invite.");
+          setError(err.message || "接受邀请失败。");
         },
       },
     });
@@ -48,7 +48,7 @@ function InviteContent() {
     if (!isSignedIn) return;
     const trimmed = token.trim();
     if (!trimmed) {
-      setError("Invite token is required.");
+      setError("邀请令牌不能为空。");
       return;
     }
     setError(null);
@@ -59,12 +59,12 @@ function InviteContent() {
   const isReady = Boolean(token.trim());
   const helperText = useMemo(() => {
     if (accepted) {
-      return "Invite accepted. Redirecting to your organization…";
+      return "邀请已接受，正在跳转到组织…";
     }
     if (!token.trim()) {
-      return "Paste the invite token or open the invite link you were sent.";
+      return "粘贴邀请令牌，或直接打开你收到的邀请链接。";
     }
-    return "Accept the invite to join the organization.";
+    return "接受邀请后即可加入该组织。";
   }, [accepted, token]);
 
   return (
