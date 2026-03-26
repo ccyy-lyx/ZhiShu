@@ -64,12 +64,12 @@ export function GatewayForm({
     >
       <div className="space-y-2">
         <label className="text-sm font-medium text-slate-900">
-          Gateway name <span className="text-red-500">*</span>
+          网关名称 <span className="text-red-500">*</span>
         </label>
         <Input
           value={name}
           onChange={(event) => onNameChange(event.target.value)}
-          placeholder="Primary gateway"
+          placeholder="主网关"
           disabled={isLoading}
         />
       </div>
@@ -77,7 +77,7 @@ export function GatewayForm({
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-900">
-            Gateway URL <span className="text-red-500">*</span>
+            网关地址 <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <Input
@@ -96,12 +96,12 @@ export function GatewayForm({
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-900">
-            Gateway token
+            网关令牌
           </label>
           <Input
             value={gatewayToken}
             onChange={(event) => onGatewayTokenChange(event.target.value)}
-            placeholder="Bearer token"
+            placeholder="Bearer 令牌"
             disabled={isLoading}
           />
         </div>
@@ -110,7 +110,7 @@ export function GatewayForm({
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-900">
-            Workspace root <span className="text-red-500">*</span>
+            工作目录 <span className="text-red-500">*</span>
           </label>
           <Input
             value={workspaceRoot}
@@ -122,14 +122,14 @@ export function GatewayForm({
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-900">
-            Disable device pairing
+            禁用设备配对
           </label>
           <label className="flex h-10 items-center gap-3 px-1 text-sm text-slate-900">
             <button
               type="button"
               role="switch"
               aria-checked={disableDevicePairing}
-              aria-label="Disable device pairing"
+              aria-label="禁用设备配对"
               onClick={() =>
                 onDisableDevicePairingChange(!disableDevicePairing)
               }
@@ -152,14 +152,14 @@ export function GatewayForm({
 
       <div className="space-y-2">
         <label className="text-sm font-medium text-slate-900">
-          Allow self-signed TLS certificates
+          允许自签名 TLS 证书
         </label>
         <label className="flex h-10 items-center gap-3 px-1 text-sm text-slate-900">
           <button
             type="button"
             role="switch"
             aria-checked={allowInsecureTls}
-            aria-label="Allow self-signed TLS certificates"
+            aria-label="允许自签名 TLS 证书"
             onClick={() => onAllowInsecureTlsChange(!allowInsecureTls)}
             disabled={isLoading}
             className={`inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition ${
