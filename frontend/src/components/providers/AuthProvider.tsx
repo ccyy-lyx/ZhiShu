@@ -6,13 +6,14 @@ import { useEffect, type ReactNode } from "react";
 import { isLikelyValidClerkPublishableKey } from "@/auth/clerkKey";
 import {
   clearLocalAuthToken,
-  getLocalAuthToken,
   isLocalAuthMode,
+  useLocalAuthToken,
 } from "@/auth/localAuth";
 import { LocalAuthLogin } from "@/components/organisms/LocalAuthLogin";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const localMode = isLocalAuthMode();
+  const localToken = useLocalAuthToken();
 
   useEffect(() => {
     if (!localMode) {
@@ -25,13 +26,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // When running behind a reverse proxy that injects Authorization for /api/*,
     // users should not need to paste/store a local token in the browser.
-    if (!getLocalAuthToken() && proxyAuthEnabled) {
+    if (proxyAuthEnabled) {
       return <>{children}</>;
     }
 
-    if (!getLocalAuthToken()) {
+    if (!localToken) {
       return <LocalAuthLogin />;
     }
+
     return <>{children}</>;
   }
 
