@@ -17,23 +17,23 @@ export function LandingShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="landing-enterprise">
-      <nav className="landing-nav" aria-label="Primary navigation">
+      <nav className="landing-nav" aria-label="主导航">
         <div className="nav-container">
-          <Link href="/" className="logo-section" aria-label="OpenClaw home">
+          <Link href="/" className="logo-section" aria-label="打开 OpenClaw 首页">
             <div className="logo-icon" aria-hidden="true">
               OC
             </div>
             <div className="logo-text">
               <div className="logo-name">OpenClaw</div>
-              <div className="logo-tagline">Mission Control</div>
+              <div className="logo-tagline">任务指挥中心</div>
             </div>
           </Link>
 
           <div className="nav-links">
-            <Link href="#capabilities">Capabilities</Link>
-            <Link href="/boards">Boards</Link>
-            <Link href="/activity">Activity</Link>
-            <Link href="/gateways">Gateways</Link>
+            <Link href="#capabilities">能力</Link>
+            <Link href="/boards">看板</Link>
+            <Link href="/activity">动态</Link>
+            <Link href="/gateways">网关</Link>
           </div>
 
           <div className="nav-cta">
@@ -46,7 +46,7 @@ export function LandingShell({ children }: { children: ReactNode }) {
                     signUpForceRedirectUrl="/onboarding"
                   >
                     <button type="button" className="btn-secondary">
-                      Sign In
+                      登录
                     </button>
                   </SignInButton>
                   <SignInButton
@@ -55,17 +55,17 @@ export function LandingShell({ children }: { children: ReactNode }) {
                     signUpForceRedirectUrl="/onboarding"
                   >
                     <button type="button" className="btn-primary">
-                      Start Free Trial
+                      开始免费试用
                     </button>
                   </SignInButton>
                 </>
               ) : (
                 <>
                   <Link href="/boards" className="btn-secondary">
-                    Boards
+                    看板
                   </Link>
                   <Link href="/onboarding" className="btn-primary">
-                    Get started
+                    开始使用
                   </Link>
                 </>
               )}
@@ -73,10 +73,10 @@ export function LandingShell({ children }: { children: ReactNode }) {
 
             <SignedIn>
               <Link href="/boards/new" className="btn-secondary">
-                Create Board
+                创建看板
               </Link>
               <Link href="/boards" className="btn-primary">
-                Open Boards
+                打开看板
               </Link>
               <UserMenu />
             </SignedIn>
@@ -90,31 +90,31 @@ export function LandingShell({ children }: { children: ReactNode }) {
         <div className="footer-content">
           <div className="footer-brand">
             <h3>OpenClaw</h3>
-            <p>A calm command center for boards, agents, and approvals.</p>
-            <div className="footer-tagline">Realtime Execution Visibility</div>
+            <p>一个平静的指挥中心，用于管理看板、智能体与审批。</p>
+            <div className="footer-tagline">实时执行可见性</div>
           </div>
 
           <div className="footer-column">
-            <h4>Product</h4>
+            <h4>产品</h4>
             <div className="footer-links">
-              <Link href="#capabilities">Capabilities</Link>
-              <Link href="/boards">Boards</Link>
-              <Link href="/activity">Activity</Link>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="#capabilities">能力</Link>
+              <Link href="/boards">看板</Link>
+              <Link href="/activity">动态</Link>
+              <Link href="/dashboard">仪表盘</Link>
             </div>
           </div>
 
           <div className="footer-column">
-            <h4>Platform</h4>
+            <h4>平台</h4>
             <div className="footer-links">
-              <Link href="/gateways">Gateways</Link>
-              <Link href="/agents">Agents</Link>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/gateways">网关</Link>
+              <Link href="/agents">智能体</Link>
+              <Link href="/dashboard">仪表盘</Link>
             </div>
           </div>
 
           <div className="footer-column">
-            <h4>Access</h4>
+            <h4>访问</h4>
             <div className="footer-links">
               <SignedOut>
                 {clerkEnabled ? (
@@ -124,25 +124,25 @@ export function LandingShell({ children }: { children: ReactNode }) {
                       forceRedirectUrl="/onboarding"
                       signUpForceRedirectUrl="/onboarding"
                     >
-                      <button type="button">Sign In</button>
+                      <button type="button">登录</button>
                     </SignInButton>
                     <SignInButton
                       mode="modal"
                       forceRedirectUrl="/onboarding"
                       signUpForceRedirectUrl="/onboarding"
                     >
-                      <button type="button">Create Account</button>
+                      <button type="button">创建账户</button>
                     </SignInButton>
                   </>
                 ) : (
-                  <Link href="/boards">Boards</Link>
+                  <Link href="/boards">看板</Link>
                 )}
-                <Link href="/onboarding">Onboarding</Link>
+                <Link href="/onboarding">引导页</Link>
               </SignedOut>
               <SignedIn>
-                <Link href="/boards">Open Boards</Link>
-                <Link href="/boards/new">Create Board</Link>
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/boards">打开看板</Link>
+                <Link href="/boards/new">创建看板</Link>
+                <Link href="/dashboard">仪表盘</Link>
               </SignedIn>
             </div>
           </div>
@@ -150,12 +150,12 @@ export function LandingShell({ children }: { children: ReactNode }) {
 
         <div className="footer-bottom">
           <div className="footer-copyright">
-            © {new Date().getFullYear()} OpenClaw. All rights reserved.
+            © {new Date().getFullYear()} OpenClaw。保留所有权利。
           </div>
           <div className="footer-bottom-links">
-            <Link href="#capabilities">Capabilities</Link>
-            <Link href="/boards">Boards</Link>
-            <Link href="/activity">Activity</Link>
+            <Link href="#capabilities">能力</Link>
+            <Link href="/boards">看板</Link>
+            <Link href="/activity">动态</Link>
           </div>
         </div>
       </footer>

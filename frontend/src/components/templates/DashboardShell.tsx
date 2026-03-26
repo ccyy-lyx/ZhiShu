@@ -17,7 +17,7 @@ import { OrgSwitcher } from "@/components/organisms/OrgSwitcher";
 import { UserMenu } from "@/components/organisms/UserMenu";
 import { isOnboardingComplete } from "@/lib/onboarding";
 
-export function DashboardShell({ children }: { children: ReactNode }) {
+export function 仪表盘Shell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
@@ -42,7 +42,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     },
   });
   const profile = meQuery.data?.status === 200 ? meQuery.data.data : null;
-  const displayName = profile?.name ?? profile?.preferred_name ?? "Operator";
+  const displayName = profile?.name ?? profile?.preferred_name ?? "操作员";
   const displayEmail = profile?.email ?? "";
 
   useEffect(() => {
@@ -122,7 +122,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 <p className="text-sm font-semibold text-slate-900">
                   {displayName}
                 </p>
-                <p className="text-xs text-slate-500">Operator</p>
+                <p className="text-xs text-slate-500">操作员</p>
               </div>
               <UserMenu displayName={displayName} displayEmail={displayEmail} />
             </div>

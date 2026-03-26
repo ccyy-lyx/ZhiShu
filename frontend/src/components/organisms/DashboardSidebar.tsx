@@ -14,22 +14,22 @@ import {
   Network,
   Settings,
   Store,
-  Tags,
+  标签,
 } from "lucide-react";
 
 import { useAuth } from "@/auth/clerk";
 import { ApiError } from "@/api/mutator";
-import { useOrganizationMembership } from "@/lib/use-organization-membership";
+import { use组织Membership } from "@/lib/use-organization-membership";
 import {
   type healthzHealthzGetResponse,
   useHealthzHealthzGet,
 } from "@/api/generated/default/default";
 import { cn } from "@/lib/utils";
 
-export function DashboardSidebar() {
+export function 仪表盘Sidebar() {
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
-  const { isAdmin } = useOrganizationMembership(isSignedIn);
+  const { isAdmin } = use组织Membership(isSignedIn);
   const healthQuery = useHealthzHealthzGet<healthzHealthzGetResponse, ApiError>(
     {
       query: {
@@ -52,21 +52,21 @@ export function DashboardSidebar() {
           : "unknown";
   const statusLabel =
     systemStatus === "operational"
-      ? "All systems operational"
+      ? "系统运行正常"
       : systemStatus === "unknown"
-        ? "System status unavailable"
-        : "System degraded";
+        ? "系统状态不可用"
+        : "系统异常";
 
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex w-[280px] -translate-x-full flex-col border-r border-slate-200 bg-white pt-16 shadow-lg transition-transform duration-200 ease-in-out [[data-sidebar=open]_&]:translate-x-0 md:relative md:inset-auto md:z-auto md:w-[260px] md:translate-x-0 md:pt-0 md:shadow-none md:transition-none">
       <div className="flex-1 px-3 py-4">
         <p className="px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Navigation
+          导航
         </p>
         <nav className="mt-3 space-y-4 text-sm">
           <div>
             <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              Overview
+              概览
             </p>
             <div className="mt-1 space-y-1">
               <Link
@@ -79,7 +79,7 @@ export function DashboardSidebar() {
                 )}
               >
                 <BarChart3 className="h-4 w-4" />
-                Dashboard
+                仪表盘
               </Link>
               <Link
                 href="/activity"
@@ -91,14 +91,14 @@ export function DashboardSidebar() {
                 )}
               >
                 <Activity className="h-4 w-4" />
-                Live feed
+                动态
               </Link>
             </div>
           </div>
 
           <div>
             <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              Boards
+              看板
             </p>
             <div className="mt-1 space-y-1">
               <Link
@@ -111,7 +111,7 @@ export function DashboardSidebar() {
                 )}
               >
                 <Folder className="h-4 w-4" />
-                Board groups
+                看板分组
               </Link>
               <Link
                 href="/boards"
@@ -123,7 +123,7 @@ export function DashboardSidebar() {
                 )}
               >
                 <LayoutGrid className="h-4 w-4" />
-                Boards
+                看板
               </Link>
               <Link
                 href="/tags"
@@ -134,8 +134,8 @@ export function DashboardSidebar() {
                     : "hover:bg-slate-100",
                 )}
               >
-                <Tags className="h-4 w-4" />
-                Tags
+                <标签 className="h-4 w-4" />
+                标签
               </Link>
               <Link
                 href="/approvals"
@@ -147,7 +147,7 @@ export function DashboardSidebar() {
                 )}
               >
                 <CheckCircle2 className="h-4 w-4" />
-                Approvals
+                审批
               </Link>
               {isAdmin ? (
                 <Link
@@ -160,7 +160,7 @@ export function DashboardSidebar() {
                   )}
                 >
                   <Settings className="h-4 w-4" />
-                  Custom fields
+                  自定义字段
                 </Link>
               ) : null}
             </div>
@@ -170,7 +170,7 @@ export function DashboardSidebar() {
             {isAdmin ? (
               <>
                 <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                  Skills
+                  技能
                 </p>
                 <div className="mt-1 space-y-1">
                   <Link
@@ -184,7 +184,7 @@ export function DashboardSidebar() {
                     )}
                   >
                     <Store className="h-4 w-4" />
-                    Marketplace
+                    市场
                   </Link>
                   <Link
                     href="/skills/packs"
@@ -196,7 +196,7 @@ export function DashboardSidebar() {
                     )}
                   >
                     <Boxes className="h-4 w-4" />
-                    Packs
+                    套件
                   </Link>
                 </div>
               </>
@@ -205,7 +205,7 @@ export function DashboardSidebar() {
 
           <div>
             <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              Administration
+              管理
             </p>
             <div className="mt-1 space-y-1">
               <Link
@@ -218,7 +218,7 @@ export function DashboardSidebar() {
                 )}
               >
                 <Building2 className="h-4 w-4" />
-                Organization
+                组织
               </Link>
               {isAdmin ? (
                 <Link
@@ -231,7 +231,7 @@ export function DashboardSidebar() {
                   )}
                 >
                   <Network className="h-4 w-4" />
-                  Gateways
+                  网关
                 </Link>
               ) : null}
               {isAdmin ? (
@@ -245,7 +245,7 @@ export function DashboardSidebar() {
                   )}
                 >
                   <Bot className="h-4 w-4" />
-                  Agents
+                  智能体
                 </Link>
               ) : null}
             </div>
