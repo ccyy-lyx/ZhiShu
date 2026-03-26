@@ -830,7 +830,7 @@ export default function OrganizationPage() {
               <div className="grid gap-4 sm:grid-cols-[1fr_200px]">
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Email
+                    邮箱
                   </label>
                   <Input
                     value={inviteEmail}
@@ -887,8 +887,8 @@ export default function OrganizationPage() {
                 </Button>
                 <Button type="submit" disabled={createInviteMutation.isPending}>
                   {createInviteMutation.isPending
-                    ? "Sending invite..."
-                    : "Send invite"}
+                    ? "发送邀请中..."
+                    : "发送邀请"}
                 </Button>
               </DialogFooter>
             </form>
@@ -911,7 +911,7 @@ export default function OrganizationPage() {
 
           {memberDetailsQuery.isLoading ? (
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
-              Loading member access...
+              加载成员权限中...
             </div>
           ) : memberDetailsQuery.data?.status === 200 ? (
             <div className="space-y-6">
@@ -924,25 +924,25 @@ export default function OrganizationPage() {
                 </p>
                 <p className="mt-1 text-xs text-slate-500">
                   {memberDetailsQuery.data.data.user?.email ??
-                    "No email on file"}
+                    "暂无邮箱信息"}
                 </p>
               </div>
 
               <div className="space-y-3">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Role
+                  角色
                 </label>
                 <Select
                   value={resolvedAccessRole}
                   onValueChange={setAccessRole}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select role" />
+                    <SelectValue placeholder="选择角色" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="owner">Owner</SelectItem>
-                    <SelectItem value="member">Member</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="owner">所有者</SelectItem>
+                    <SelectItem value="member">成员</SelectItem>
+                    <SelectItem value="admin">管理员</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -958,7 +958,7 @@ export default function OrganizationPage() {
                 access={resolvedAccessMap}
                 onAccessChange={setAccessMap}
                 emptyMessage={
-                  boardsQuery.isLoading ? "Loading boards..." : undefined
+                  boardsQuery.isLoading ? "看板加载中..." : undefined
                 }
               />
 
@@ -968,7 +968,7 @@ export default function OrganizationPage() {
             </div>
           ) : (
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
-              Unable to load member access.
+              无法加载成员权限。
             </div>
           )}
 
@@ -983,7 +983,7 @@ export default function OrganizationPage() {
                   setRemoveMemberOpen(true);
                 }}
               >
-                Remove member
+                移除成员
               </Button>
             ) : null}
             <Button
@@ -991,7 +991,7 @@ export default function OrganizationPage() {
               variant="outline"
               onClick={() => setAccessDialogOpen(false)}
             >
-              Cancel
+              取消
             </Button>
             <Button
               type="button"
@@ -1004,8 +1004,8 @@ export default function OrganizationPage() {
             >
               {updateMemberAccessMutation.isPending ||
               updateMemberRoleMutation.isPending
-                ? "Saving..."
-                : "Save changes"}
+                ? "保存中..."
+                : "保存更改"}
             </Button>
           </DialogFooter>
         </DialogContent>

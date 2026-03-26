@@ -79,22 +79,22 @@ function InviteContent() {
         <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 md:p-8 shadow-sm">
           <div className="flex flex-col gap-3">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-quiet">
-              Organization Invite
+              组织邀请
             </p>
             <h1 className="text-2xl font-semibold text-strong">
-              Join your team in OpenClaw
+              加入你的 OpenClaw 团队
             </h1>
             <p className="text-sm text-muted">{helperText}</p>
           </div>
 
           <div className="mt-6 flex flex-col gap-4">
             <label className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-              Invite Token
+              邀请令牌
             </label>
             <Input
               value={token}
               onChange={(event) => setToken(event.target.value)}
-              placeholder="Paste invite token"
+              placeholder="粘贴邀请令牌"
               disabled={accepted || isSubmitting}
             />
 
@@ -106,9 +106,9 @@ function InviteContent() {
 
             <SignedOut>
               <div className="flex flex-col gap-3 rounded-xl border border-dashed border-[color:var(--border)] bg-[color:var(--surface-muted)] p-4 text-sm text-muted">
-                <p>Sign in to accept your invite.</p>
+                <p>登录后接受邀请。</p>
                 <SignInButton mode="modal">
-                  <Button size="md">Sign in</Button>
+                  <Button size="md">登录</Button>
                 </SignInButton>
               </div>
             </SignedOut>
@@ -124,10 +124,10 @@ function InviteContent() {
                   disabled={!isReady || isSubmitting || accepted}
                 >
                   {accepted
-                    ? "Invite accepted"
+                    ? "已接受邀请"
                     : isSubmitting
-                      ? "Accepting…"
-                      : "Accept invite"}
+                      ? "接受中…"
+                      : "接受邀请"}
                 </Button>
                 <Button
                   type="button"
@@ -136,7 +136,7 @@ function InviteContent() {
                   onClick={() => router.push("/")}
                   disabled={isSubmitting}
                 >
-                  Go back
+                  返回
                 </Button>
               </form>
             </SignedIn>
@@ -159,7 +159,7 @@ export default function InvitePage() {
           </header>
           <main className="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-16">
             <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 md:p-8 shadow-sm">
-              <div className="text-sm text-muted">Loading invite…</div>
+              <div className="text-sm text-muted">邀请加载中…</div>
             </div>
           </main>
         </div>
