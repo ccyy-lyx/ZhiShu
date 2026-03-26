@@ -62,7 +62,7 @@ export function GatewaysTable({
   columnOrder,
   disableSorting = false,
   onDelete,
-  emptyMessage = "No gateways found.",
+  emptyMessage = "未找到网关。",
   emptyState,
 }: GatewaysTableProps) {
   const [internalSorting, setInternalSorting] = useState<SortingState>([
@@ -88,7 +88,7 @@ export function GatewaysTable({
     const baseColumns: ColumnDef<GatewayRead>[] = [
       {
         accessorKey: "name",
-        header: "Gateway",
+        header: "网关",
         cell: ({ row }) =>
           linkifyCell({
             href: `/gateways/${row.original.id}`,
@@ -98,7 +98,7 @@ export function GatewaysTable({
       },
       {
         accessorKey: "workspace_root",
-        header: "Workspace root",
+        header: "工作目录",
         cell: ({ row }) => (
           <span className="text-sm text-slate-700">
             {truncate(row.original.workspace_root, 28)}
@@ -107,7 +107,7 @@ export function GatewaysTable({
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
     ];

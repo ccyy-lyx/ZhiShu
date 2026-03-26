@@ -187,7 +187,7 @@ export default function NewBoardPage() {
                 options={gatewayOptions}
                 placeholder="Select gateway"
                 searchPlaceholder="Search gateways..."
-                emptyMessage="No gateways found."
+                emptyMessage="未找到网关。"
                 triggerClassName="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 contentClassName="rounded-xl border border-slate-200 shadow-lg"
                 itemClassName="px-4 py-3 text-sm text-slate-700 data-[selected=true]:bg-slate-50 data-[selected=true]:text-slate-900"

@@ -162,8 +162,8 @@ export default function EditGatewayPage() {
       }}
       title={
         resolvedName.trim()
-          ? `Edit gateway — ${resolvedName.trim()}`
-          : "Edit gateway"
+          ? `编辑网关 — ${resolvedName.trim()}`
+          : "编辑网关"
       }
       description="Update connection settings for this OpenClaw gateway."
       isAdmin={isAdmin}

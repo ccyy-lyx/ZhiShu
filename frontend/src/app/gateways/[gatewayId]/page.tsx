@@ -166,17 +166,17 @@ export default function GatewayDetailPage() {
           forceRedirectUrl: `/gateways/${gatewayId}`,
         }}
         title={title}
-        description="Gateway configuration and connection details."
+        description="网关配置与连接详情。"
         headerActions={
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={() => router.push("/gateways")}>
-              Back to gateways
+              返回网关列表
             </Button>
             {isAdmin && gatewayId ? (
               <Button
                 onClick={() => router.push(`/gateways/${gatewayId}/edit`)}
               >
-                Edit gateway
+                编辑网关
               </Button>
             ) : null}
           </div>
