@@ -36,9 +36,9 @@ describe("LocalAuthLogin", () => {
     const user = userEvent.setup();
     render(<LocalAuthLogin />);
 
-    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.click(screen.getByRole("button", { name: "继续" }));
 
-    expect(screen.getByText("Bearer token is required.")).toBeInTheDocument();
+    expect(screen.getByText("token 不能为空。")).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
     expect(setLocalAuthTokenMock).not.toHaveBeenCalled();
   });
@@ -47,11 +47,11 @@ describe("LocalAuthLogin", () => {
     const user = userEvent.setup();
     render(<LocalAuthLogin />);
 
-    await user.type(screen.getByPlaceholderText("Paste token"), "x".repeat(49));
-    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.type(screen.getByPlaceholderText("粘贴 token"), "x".repeat(49));
+    await user.click(screen.getByRole("button", { name: "继续" }));
 
     expect(
-      screen.getByText("Bearer token must be at least 50 characters."),
+      screen.getByText("token 长度至少需要 50 位。"),
     ).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
     expect(setLocalAuthTokenMock).not.toHaveBeenCalled();
@@ -63,11 +63,11 @@ describe("LocalAuthLogin", () => {
     const user = userEvent.setup();
     render(<LocalAuthLogin onAuthenticated={onAuthenticatedMock} />);
 
-    await user.type(screen.getByPlaceholderText("Paste token"), "x".repeat(50));
-    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.type(screen.getByPlaceholderText("粘贴 token"), "x".repeat(50));
+    await user.click(screen.getByRole("button", { name: "继续" }));
 
     await waitFor(() =>
-      expect(screen.getByText("Token is invalid.")).toBeInTheDocument(),
+      expect(screen.getByText("token 无效。")).toBeInTheDocument(),
     );
     expect(fetchMock).toHaveBeenCalledWith(
       "http://localhost:38000/api/v1/users/me",
@@ -87,8 +87,8 @@ describe("LocalAuthLogin", () => {
     render(<LocalAuthLogin onAuthenticated={onAuthenticatedMock} />);
 
     const token = `  ${"g".repeat(50)} `;
-    await user.type(screen.getByPlaceholderText("Paste token"), token);
-    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.type(screen.getByPlaceholderText("粘贴 token"), token);
+    await user.click(screen.getByRole("button", { name: "继续" }));
 
     await waitFor(() =>
       expect(setLocalAuthTokenMock).toHaveBeenCalledWith("g".repeat(50)),
@@ -102,12 +102,12 @@ describe("LocalAuthLogin", () => {
     const user = userEvent.setup();
     render(<LocalAuthLogin onAuthenticated={onAuthenticatedMock} />);
 
-    await user.type(screen.getByPlaceholderText("Paste token"), "t".repeat(50));
-    await user.click(screen.getByRole("button", { name: "Continue" }));
+    await user.type(screen.getByPlaceholderText("粘贴 token"), "t".repeat(50));
+    await user.click(screen.getByRole("button", { name: "继续" }));
 
     await waitFor(() =>
       expect(
-        screen.getByText("Unable to reach backend to validate token."),
+        screen.getByText("无法连接后端校验 token。"),
       ).toBeInTheDocument(),
     );
     expect(setLocalAuthTokenMock).not.toHaveBeenCalled();
