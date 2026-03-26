@@ -121,16 +121,16 @@ export default function NewBoardPage() {
     const trimmedName = name.trim();
     const resolvedGatewayId = displayGatewayId;
     if (!trimmedName) {
-      setError("Board name is required.");
+      setError("请输入看板名称。");
       return;
     }
     if (!resolvedGatewayId) {
-      setError("Select a gateway before creating a board.");
+      setError("创建看板前请选择一个网关。");
       return;
     }
     const trimmedDescription = description.trim();
     if (!trimmedDescription) {
-      setError("Board description is required.");
+      setError("请输入看板描述。");
       return;
     }
 
@@ -150,14 +150,14 @@ export default function NewBoardPage() {
   return (
     <DashboardPageLayout
       signedOut={{
-        message: "Sign in to create a board.",
+        message: "登录后才能创建看板。",
         forceRedirectUrl: "/boards/new",
         signUpForceRedirectUrl: "/boards/new",
       }}
-      title="Create board"
-      description="Boards organize tasks and agents by mission context."
+      title="创建看板"
+      description="看板用于按任务目标组织任务与智能体。"
       isAdmin={isAdmin}
-      adminOnlyMessage="Only organization owners and admins can create boards."
+      adminOnlyMessage="只有组织所有者和管理员可以创建看板。"
     >
       <form
         onSubmit={handleSubmit}
@@ -167,26 +167,26 @@ export default function NewBoardPage() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900">
-                Board name <span className="text-red-500">*</span>
+                看板名称 <span className="text-red-500">*</span>
               </label>
               <Input
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                placeholder="e.g. Release operations"
+                placeholder="例如：发布运维"
                 disabled={isLoading}
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900">
-                Gateway <span className="text-red-500">*</span>
+                网关 <span className="text-red-500">*</span>
               </label>
               <SearchableSelect
-                ariaLabel="Select gateway"
+                ariaLabel="选择网关"
                 value={displayGatewayId}
                 onValueChange={setGatewayId}
                 options={gatewayOptions}
-                placeholder="Select gateway"
-                searchPlaceholder="Search gateways..."
+                placeholder="选择网关"
+                searchPlaceholder="搜索网关…"
                 emptyMessage="未找到网关。"
                 triggerClassName="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 contentClassName="rounded-xl border border-slate-200 shadow-lg"
@@ -198,35 +198,35 @@ export default function NewBoardPage() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900">
-                Board group
+                看板分组
               </label>
               <SearchableSelect
-                ariaLabel="Select board group"
+                ariaLabel="选择分组"
                 value={boardGroupId}
                 onValueChange={setBoardGroupId}
                 options={groupOptions}
-                placeholder="No group"
-                searchPlaceholder="Search groups..."
-                emptyMessage="No groups found."
+                placeholder="不分组"
+                searchPlaceholder="搜索分组…"
+                emptyMessage="未找到分组。"
                 triggerClassName="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 contentClassName="rounded-xl border border-slate-200 shadow-lg"
                 itemClassName="px-4 py-3 text-sm text-slate-700 data-[selected=true]:bg-slate-50 data-[selected=true]:text-slate-900"
                 disabled={isLoading}
               />
               <p className="text-xs text-slate-500">
-                Optional. Groups increase cross-board visibility.
+                可选。分组可提升跨看板的可见性。
               </p>
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-slate-900">
-              Description <span className="text-red-500">*</span>
+              描述 <span className="text-red-500">*</span>
             </label>
             <Textarea
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="What context should the lead agent know before onboarding?"
+              placeholder="在引导智能体时，有哪些上下文需要提前说明？"
               className="min-h-[120px]"
               disabled={isLoading}
             />
@@ -236,14 +236,14 @@ export default function NewBoardPage() {
         {gateways.length === 0 ? (
           <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
             <p>
-              No gateways available. Create one in{" "}
+              暂无可用网关。请先在{" "}
               <Link
                 href="/gateways"
                 className="font-medium text-blue-600 hover:text-blue-700"
               >
-                Gateways
+                网关
               </Link>{" "}
-              to continue.
+              中创建一个再继续。
             </p>
           </div>
         ) : null}
@@ -259,10 +259,10 @@ export default function NewBoardPage() {
             onClick={() => router.push("/boards")}
             disabled={isLoading}
           >
-            Cancel
+            取消
           </Button>
           <Button type="submit" disabled={isLoading || !isFormReady}>
-            {isLoading ? "Creating…" : "Create board"}
+            {isLoading ? "创建中…" : "创建看板"}
           </Button>
         </div>
       </form>
