@@ -180,7 +180,7 @@ export default function SkillsPacksPage() {
       }
 
       if (hasFailure) {
-        setSyncAllError("Some skill packs failed to sync. Please try again.");
+        setSyncAllError("部分技能包同步失败，请重试。");
       }
     } finally {
       setIsSyncingAll(false);
@@ -194,11 +194,11 @@ export default function SkillsPacksPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to manage skill packs.",
+          message: "登录后可管理技能包。",
           forceRedirectUrl: "/skills/packs",
         }}
-        title="Skill Packs"
-        description={`${packs.length} pack${packs.length === 1 ? "" : "s"} configured.`}
+        title="技能包"
+        description={`已配置 ${packs.length} 个技能包。`}
         headerActions={
           isAdmin ? (
             <div className="flex items-center gap-2">
@@ -215,19 +215,19 @@ export default function SkillsPacksPage() {
                   void handleSyncAllPacks();
                 }}
               >
-                {isSyncingAll ? "Syncing all..." : "Sync all"}
+                {isSyncingAll ? "同步全部中..." : "同步全部"}
               </button>
               <Link
                 href="/skills/packs/new"
                 className={buttonVariants({ variant: "primary", size: "md" })}
               >
-                Add pack
+                新建技能包
               </Link>
             </div>
           ) : null
         }
         isAdmin={isAdmin}
-        adminOnlyMessage="Only organization owners and admins can manage skill packs."
+        adminOnlyMessage="仅组织所有者和管理员可管理技能包。"
         stickyHeader
       >
         <div className="space-y-6">
@@ -246,10 +246,10 @@ export default function SkillsPacksPage() {
               }}
               onDelete={setDeleteTarget}
               emptyState={{
-                title: "No packs yet",
-                description: "Add your first skill URL pack to get started.",
+                title: "暂无技能包",
+                description: "先添加一个技能包链接，再开始同步。",
                 actionHref: "/skills/packs/new",
-                actionLabel: "Add your first pack",
+                actionLabel: "添加第一个技能包",
               }}
             />
           </div>
@@ -287,12 +287,12 @@ export default function SkillsPacksPage() {
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null);
         }}
-        ariaLabel="Delete skill pack"
-        title="Delete skill pack"
+        ariaLabel="删除技能包"
+        title="删除技能包"
         description={
           <>
-            This will remove <strong>{deleteTarget?.name}</strong> from your
-            pack list. This action cannot be undone.
+            这将从技能包列表中移除 <strong>{deleteTarget?.name}</strong>。
+            此操作无法撤销。
           </>
         }
         errorMessage={deleteMutation.error?.message}

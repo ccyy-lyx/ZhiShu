@@ -77,30 +77,30 @@ const RISK_SORT_ORDER: Record<string, number> = {
 function formatRiskLabel(risk: string) {
   const normalized = risk.trim().toLowerCase();
   if (!normalized) {
-    return "Unknown";
+    return "未知";
   }
 
   switch (normalized) {
     case "safe":
-      return "Safe";
+      return "安全";
     case "low":
-      return "Low";
+      return "低";
     case "minimal":
-      return "Minimal";
+      return "极低";
     case "medium":
-      return "Medium";
+      return "中";
     case "moderate":
-      return "Moderate";
+      return "中等";
     case "elevated":
-      return "Elevated";
+      return "较高";
     case "high":
-      return "High";
+      return "高";
     case "critical":
-      return "Critical";
+      return "严重";
     case "none":
-      return "None";
+      return "无";
     case "unknown":
-      return "Unknown";
+      return "未知";
     default:
       return normalized
         .split(/[\s_-]+/)
@@ -113,7 +113,7 @@ function formatRiskLabel(risk: string) {
 function formatCategoryLabel(category: string) {
   const normalized = category.trim();
   if (!normalized) {
-    return "Uncategorized";
+    return "未分类";
   }
   return normalized
     .split(/[\s_-]+/)
@@ -190,7 +190,7 @@ export default function SkillsMarketplacePage() {
     initialCategory || "all",
   );
   const [selectedRisk, setSelectedRisk] = useState<string>(
-    initialRisk || "safe",
+    initialRisk || "all",
   );
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialPageSize);
@@ -227,7 +227,7 @@ export default function SkillsMarketplacePage() {
   }, [selectedCategory]);
   const normalizedRisk = useMemo(() => {
     const value = selectedRisk.trim().toLowerCase();
-    return value.length > 0 ? value : "safe";
+    return value.length > 0 ? value : "all";
   }, [selectedRisk]);
   const normalizedSearch = useMemo(() => searchTerm.trim(), [searchTerm]);
   const selectedPackId = searchParams.get("packId");
@@ -430,7 +430,7 @@ export default function SkillsMarketplacePage() {
       selectedRisk !== "all" &&
       !riskFilterOptions.includes(selectedRisk.trim().toLowerCase())
     ) {
-      setSelectedRisk("safe");
+      setSelectedRisk("all");
     }
   }, [riskFilterOptions, selectedRisk]);
 
@@ -469,7 +469,7 @@ export default function SkillsMarketplacePage() {
       nextParams.delete("category");
     }
 
-    if (selectedRisk !== "safe") {
+    if (selectedRisk !== "all") {
       nextParams.set("risk", selectedRisk);
     } else {
       nextParams.delete("risk");

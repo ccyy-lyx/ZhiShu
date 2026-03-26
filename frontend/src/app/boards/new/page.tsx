@@ -76,7 +76,7 @@ export default function NewBoardPage() {
         }
       },
       onError: (err) => {
-        setError(err.message || "Something went wrong.");
+        setError(err.message || "发生了错误。");
       },
     },
   });
@@ -109,7 +109,7 @@ export default function NewBoardPage() {
 
   const groupOptions = useMemo(
     () => [
-      { value: "none", label: "No group" },
+      { value: "none", label: "不分组" },
       ...groups.map((group) => ({ value: group.id, label: group.name })),
     ],
     [groups],

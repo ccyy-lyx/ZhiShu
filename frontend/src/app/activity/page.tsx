@@ -206,12 +206,17 @@ const normalizeStatus = (value?: string | null) =>
 
 const humanizeApprovalAction = (value: string): string => {
   const cleaned = value.replace(/[._-]+/g, " ").trim();
-  if (!cleaned) return "Approval";
+  if (!cleaned) return "审批";
   return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 };
 
-const humanizeStatus = (value: string): string =>
-  value.replace(/_/g, " ").trim() || "offline";
+const humanizeStatus = (value: string): string => {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return "离线";
+  if (normalized === "online") return "在线";
+  if (normalized === "offline") return "离线";
+  return normalized.replace(/_/g, " ");
+};
 
 const roleFromAgent = (agent?: Agent | null): string | null => {
   if (!agent) return null;
@@ -224,20 +229,20 @@ const roleFromAgent = (agent?: Agent | null): string | null => {
 };
 
 const eventLabel = (eventType: FeedEventType): string => {
-  if (eventType === "task.comment") return "Comment";
-  if (eventType === "task.created") return "Created";
-  if (eventType === "task.status_changed") return "Status";
-  if (eventType === "board.chat") return "Chat";
-  if (eventType === "board.command") return "Command";
-  if (eventType === "agent.created") return "Agent";
-  if (eventType === "agent.online") return "Online";
-  if (eventType === "agent.offline") return "Offline";
-  if (eventType === "agent.updated") return "Agent update";
-  if (eventType === "approval.created") return "Approval";
-  if (eventType === "approval.updated") return "Approval update";
-  if (eventType === "approval.approved") return "Approved";
-  if (eventType === "approval.rejected") return "Rejected";
-  return "Updated";
+  if (eventType === "task.comment") return "评论";
+  if (eventType === "task.created") return "创建";
+  if (eventType === "task.status_changed") return "状态";
+  if (eventType === "board.chat") return "聊天";
+  if (eventType === "board.command") return "命令";
+  if (eventType === "agent.created") return "智能体";
+  if (eventType === "agent.online") return "在线";
+  if (eventType === "agent.offline") return "离线";
+  if (eventType === "agent.updated") return "智能体更新";
+  if (eventType === "approval.created") return "审批";
+  if (eventType === "approval.updated") return "审批更新";
+  if (eventType === "approval.approved") return "已批准";
+  if (eventType === "approval.rejected") return "已拒绝";
+  return "已更新";
 };
 
 const eventPillClass = (eventType: FeedEventType): string => {
@@ -532,7 +537,7 @@ export default function ActivityPage() {
         task_id: taskId,
         task_title: meta?.title ?? null,
         title:
-          meta?.title ?? (taskId ? "Unknown task" : "Task activity"),
+          meta?.title ?? (taskId ? "未知任务" : "任务动态"),
         context_href: buildRouteHref(effectiveRouteName, effectiveRouteParams, {
           eventId: event.id,
           eventType: event.event_type,
@@ -571,7 +576,7 @@ export default function ActivityPage() {
         task_id: taskId,
         task_title: meta?.title ?? null,
         title:
-          meta?.title ?? (taskId ? "Unknown task" : "Task activity"),
+          meta?.title ?? (taskId ? "未知任务" : "任务动态"),
         context_href: buildRouteHref("board", routeParams, {
           eventId: comment.id,
           eventType: "task.comment",
@@ -647,7 +652,7 @@ export default function ActivityPage() {
         board_href: buildBoardHref(routeParams, boardId),
         task_id: taskId,
         task_title: taskMeta?.title ?? null,
-        title: `Approval · ${action}`,
+        title: `审批 · ${action}`,
         context_href: buildRouteHref("board.approvals", routeParams, {
           eventId: approval.id,
           eventType: kind,

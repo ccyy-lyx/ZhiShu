@@ -62,21 +62,21 @@ export function SkillPacksTable({
     const baseColumns: ColumnDef<SkillPackRead>[] = [
       {
         accessorKey: "name",
-        header: "Pack",
+        header: "技能包",
         cell: ({ row }) => (
           <div>
             <p className="text-sm font-medium text-slate-900">
               {row.original.name}
             </p>
             <p className="mt-1 line-clamp-2 text-xs text-slate-500">
-              {row.original.description || "No description provided."}
+              {row.original.description || "暂无描述。"}
             </p>
           </div>
         ),
       },
       {
         accessorKey: "source_url",
-        header: "Pack URL",
+        header: "技能包链接",
         cell: ({ row }) => (
           <Link
             href={row.original.source_url}
@@ -90,7 +90,7 @@ export function SkillPacksTable({
       },
       {
         accessorKey: "branch",
-        header: "Branch",
+        header: "分支",
         cell: ({ row }) => (
           <p className="text-sm text-slate-900">
             {row.original.branch || "main"}
@@ -99,7 +99,7 @@ export function SkillPacksTable({
       },
       {
         accessorKey: "skill_count",
-        header: "Skills",
+        header: "技能数",
         cell: ({ row }) => (
           <Link
             href={`/skills/marketplace?packId=${encodeURIComponent(row.original.id)}`}
@@ -111,7 +111,7 @@ export function SkillPacksTable({
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
       {
@@ -132,7 +132,7 @@ export function SkillPacksTable({
                 onClick={() => onSync(row.original)}
                 disabled={isThisPackSyncing || !canSync}
               >
-                {isThisPackSyncing ? "Syncing..." : "Sync"}
+                {isThisPackSyncing ? "同步中..." : "同步"}
               </Button>
             </div>
           );
