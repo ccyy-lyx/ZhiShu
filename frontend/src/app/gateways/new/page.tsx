@@ -49,7 +49,7 @@ export default function NewGatewayPage() {
         }
       },
       onError: (err) => {
-        setError(err.message || "Something went wrong.");
+        setError(err.message || "操作失败，请稍后重试。");
       },
     },
   });
@@ -67,7 +67,7 @@ export default function NewGatewayPage() {
     if (!isSignedIn) return;
 
     if (!name.trim()) {
-      setError("Gateway name is required.");
+      setError("网关名称不能为空。");
       return;
     }
     const gatewayValidation = validateGatewayUrl(gatewayUrl);
@@ -78,7 +78,7 @@ export default function NewGatewayPage() {
       return;
     }
     if (!workspaceRoot.trim()) {
-      setError("Workspace root is required.");
+      setError("工作目录（workspace root）不能为空。");
       return;
     }
 
@@ -112,13 +112,13 @@ export default function NewGatewayPage() {
   return (
     <DashboardPageLayout
       signedOut={{
-        message: "Sign in to create a gateway.",
+        message: "登录后创建网关。",
         forceRedirectUrl: "/gateways/new",
       }}
-      title="Create gateway"
-      description="Configure an OpenClaw gateway for mission control."
+      title="创建网关"
+      description="为 Mission Control 配置一个 OpenClaw 网关。"
       isAdmin={isAdmin}
-      adminOnlyMessage="Only organization owners and admins can create gateways."
+      adminOnlyMessage="仅组织所有者和管理员可以创建网关。"
     >
       <GatewayForm
         name={name}
@@ -134,9 +134,9 @@ export default function NewGatewayPage() {
         isLoading={isLoading}
         canSubmit={canSubmit}
         workspaceRootPlaceholder={DEFAULT_WORKSPACE_ROOT}
-        cancelLabel="Cancel"
-        submitLabel="Create gateway"
-        submitBusyLabel="Creating…"
+        cancelLabel="取消"
+        submitLabel="创建网关"
+        submitBusyLabel="创建中…"
         onSubmit={handleSubmit}
         onCancel={() => router.push("/gateways")}
         onNameChange={setName}

@@ -91,11 +91,11 @@ export default function GatewaysPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to view gateways.",
+          message: "登录后查看网关。",
           forceRedirectUrl: "/gateways",
         }}
-        title="Gateways"
-        description="Manage OpenClaw gateway connections used by boards"
+        title="网关"
+        description="管理看板使用的 OpenClaw 网关连接"
         headerActions={
           isAdmin && gateways.length > 0 ? (
             <Link
@@ -105,12 +105,12 @@ export default function GatewaysPage() {
                 variant: "primary",
               })}
             >
-              Create gateway
+              创建网关
             </Link>
           ) : null
         }
         isAdmin={isAdmin}
-        adminOnlyMessage="Only organization owners and admins can access gateways."
+        adminOnlyMessage="仅组织所有者和管理员可以访问网关。"
         stickyHeader
       >
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -123,11 +123,11 @@ export default function GatewaysPage() {
             stickyHeader
             onDelete={setDeleteTarget}
             emptyState={{
-              title: "No gateways yet",
+              title: "暂无网关",
               description:
-                "Create your first gateway to connect boards and start managing your OpenClaw connections.",
+                "创建你的第一个网关，用于连接看板并开始管理 OpenClaw 网关连接。",
               actionHref: "/gateways/new",
-              actionLabel: "Create your first gateway",
+              actionLabel: "创建第一个网关",
             }}
           />
         </div>
@@ -142,11 +142,11 @@ export default function GatewaysPage() {
       <ConfirmActionDialog
         open={Boolean(deleteTarget)}
         onOpenChange={() => setDeleteTarget(null)}
-        title="Delete gateway?"
+        title="删除网关？"
         description={
           <>
-            This removes the gateway connection from Mission Control. Boards
-            using it will need a new gateway assigned.
+            这会从 Mission Control 中移除该网关连接。
+            使用它的看板需要重新分配一个新的网关。
           </>
         }
         errorMessage={deleteMutation.error?.message}
