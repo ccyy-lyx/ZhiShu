@@ -158,7 +158,7 @@ function BoardAccessEditor({
     <div className="space-y-3">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Board access
+          看板权限
         </p>
         <div className="mt-3 inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
           <button
@@ -172,7 +172,7 @@ function BoardAccessEditor({
             onClick={() => onScopeChange("all")}
             disabled={disabled}
           >
-            All boards
+            全部看板
           </button>
           <button
             type="button"
@@ -185,7 +185,7 @@ function BoardAccessEditor({
             onClick={() => onScopeChange("custom")}
             disabled={disabled}
           >
-            Selected boards
+            指定看板
           </button>
         </div>
       </div>
@@ -200,7 +200,7 @@ function BoardAccessEditor({
               onChange={handleAllReadToggle}
               disabled={disabled}
             />
-            Read
+            读取
           </label>
           <label className="flex items-center gap-2 text-slate-600">
             <input
@@ -210,10 +210,10 @@ function BoardAccessEditor({
               onChange={handleAllWriteToggle}
               disabled={disabled}
             />
-            Write
+            写入
           </label>
           <span className="text-xs text-slate-500">
-            Write access implies read permissions.
+            写入权限包含读取权限。
           </span>
         </div>
       ) : (
@@ -709,7 +709,7 @@ export default function OrganizationPage() {
                 <div>
                   <div className="flex flex-wrap items-center gap-3">
                     <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-                      Organization
+                      组织
                     </h1>
                     <Badge
                       variant="outline"
@@ -720,26 +720,26 @@ export default function OrganizationPage() {
                     </Badge>
                   </div>
                   <p className="mt-1 text-sm text-slate-500">
-                    Manage members and board access across your workspace.
+                    管理工作区内的成员与看板访问权限。
                   </p>
                   <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-500">
                     <span>
                       <strong className="text-slate-900">
                         {members.length}
                       </strong>{" "}
-                      members
+                      名成员
                     </span>
                     <span>
                       <strong className="text-slate-900">
                         {boards.length}
                       </strong>{" "}
-                      boards
+                      个看板
                     </span>
                     <span>
                       <strong className="text-slate-900">
                         {invites.length}
                       </strong>{" "}
-                      pending
+                      个待处理
                     </span>
                   </div>
                 </div>
@@ -754,7 +754,7 @@ export default function OrganizationPage() {
                         setDeleteOrgOpen(true);
                       }}
                     >
-                      Delete organization
+                      删除组织
                     </Button>
                   ) : null}
                   <Button
@@ -764,11 +764,11 @@ export default function OrganizationPage() {
                     title={
                       isAdmin
                         ? undefined
-                        : "Only organization admins can invite"
+                        : "仅组织管理员可邀请成员"
                     }
                   >
                     <UserPlus className="h-4 w-4" />
-                    Invite member
+                    邀请成员
                   </Button>
                 </div>
               </div>
@@ -780,15 +780,15 @@ export default function OrganizationPage() {
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-4">
                 <div>
                   <h2 className="text-sm font-semibold text-slate-900">
-                    Members & invites
+                    成员与邀请
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Invite teammates and tune their board permissions.
+                    邀请团队成员，并配置他们的看板权限。
                   </p>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-500">
                   <Users className="h-4 w-4" />
-                  {members.length + invites.length} total
+                  {members.length + invites.length} 总计
                 </div>
               </div>
               <div className="overflow-x-auto">
@@ -819,9 +819,9 @@ export default function OrganizationPage() {
       <Dialog open={inviteDialogOpen} onOpenChange={handleInviteDialogChange}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Invite a member</DialogTitle>
+            <DialogTitle>邀请成员</DialogTitle>
             <DialogDescription>
-              Grant access to all boards or select specific workspaces.
+              授予所有看板访问权限，或选择特定看板进行授权。
             </DialogDescription>
           </DialogHeader>
 
@@ -830,7 +830,7 @@ export default function OrganizationPage() {
               <div className="grid gap-4 sm:grid-cols-[1fr_200px]">
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Email address
+                    Email
                   </label>
                   <Input
                     value={inviteEmail}
@@ -842,15 +842,15 @@ export default function OrganizationPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Role
+                    角色
                   </label>
                   <Select value={inviteRole} onValueChange={setInviteRole}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select role" />
+                      <SelectValue placeholder="选择角色" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="member">Member</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="member">成员</SelectItem>
+                      <SelectItem value="admin">管理员</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -868,8 +868,8 @@ export default function OrganizationPage() {
                 onAccessChange={setInviteAccess}
                 emptyMessage={
                   boardsQuery.isLoading
-                    ? "Loading boards..."
-                    : "Create a board to start assigning access."
+                    ? "看板加载中…"
+                    : "请先创建一个看板再分配权限。"
                 }
               />
 
@@ -883,7 +883,7 @@ export default function OrganizationPage() {
                   variant="outline"
                   onClick={() => setInviteDialogOpen(false)}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit" disabled={createInviteMutation.isPending}>
                   {createInviteMutation.isPending
@@ -894,7 +894,7 @@ export default function OrganizationPage() {
             </form>
           ) : (
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
-              Only organization admins can invite new members.
+              仅组织管理员可以邀请新成员。
             </div>
           )}
         </DialogContent>
@@ -903,9 +903,9 @@ export default function OrganizationPage() {
       <Dialog open={accessDialogOpen} onOpenChange={handleAccessDialogChange}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Manage member access</DialogTitle>
+            <DialogTitle>管理成员访问权限</DialogTitle>
             <DialogDescription>
-              Adjust board permissions and role for this teammate.
+              调整该成员的看板权限与角色。
             </DialogDescription>
           </DialogHeader>
 
