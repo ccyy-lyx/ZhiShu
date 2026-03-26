@@ -17,7 +17,7 @@ import { OrgSwitcher } from "@/components/organisms/OrgSwitcher";
 import { UserMenu } from "@/components/organisms/UserMenu";
 import { isOnboardingComplete } from "@/lib/onboarding";
 
-export function 仪表盘Shell({ children }: { children: ReactNode }) {
+export function DashboardShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
