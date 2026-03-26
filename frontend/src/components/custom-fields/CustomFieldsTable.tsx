@@ -74,33 +74,33 @@ export function CustomFieldsTable({
     () => [
       {
         accessorKey: "field_key",
-        header: "Field",
+        header: "字段",
         cell: ({ row }) => (
           <div>
             <p className="text-sm font-semibold text-slate-900">
               {row.original.label || row.original.field_key}
             </p>
             <p className="mt-1 font-mono text-xs text-slate-500">
-              key: {row.original.field_key}
+              键: {row.original.field_key}
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              {row.original.description || "No description"}
+              {row.original.description || "暂无描述"}
             </p>
           </div>
         ),
       },
       {
         accessorKey: "required",
-        header: "Required",
+        header: "必填",
         cell: ({ row }) => (
           <span className="text-sm text-slate-700">
-            {row.original.required === true ? "Required" : "Optional"}
+            {row.original.required === true ? "必填" : "可选"}
           </span>
         ),
       },
       {
         accessorKey: "field_type",
-        header: "Type",
+        header: "类型",
         cell: ({ row }) => (
           <span className="text-sm text-slate-700">
             {row.original.field_type}
@@ -109,7 +109,7 @@ export function CustomFieldsTable({
       },
       {
         accessorKey: "ui_visibility",
-        header: "UI visible",
+        header: "界面可见性",
         cell: ({ row }) => (
           <span className="text-sm text-slate-700">
             {row.original.ui_visibility}
@@ -118,7 +118,7 @@ export function CustomFieldsTable({
       },
       {
         accessorKey: "default_value",
-        header: "Default value",
+        header: "默认值",
         enableSorting: false,
         cell: ({ row }) => (
           <p className="font-mono text-xs break-all text-slate-700">
@@ -128,7 +128,7 @@ export function CustomFieldsTable({
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
     ],
@@ -162,7 +162,7 @@ export function CustomFieldsTable({
                   ? [
                       {
                         key: "edit",
-                        label: "Edit",
+                        label: "编辑",
                         href: editHref,
                       },
                     ]
@@ -171,7 +171,7 @@ export function CustomFieldsTable({
                   ? [
                       {
                         key: "delete",
-                        label: "Delete",
+                        label: "删除",
                         onClick: onDelete,
                       },
                     ]

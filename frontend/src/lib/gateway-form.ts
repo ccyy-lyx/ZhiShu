@@ -56,18 +56,18 @@ function hasExplicitPort(urlString: string): boolean {
 
 export const validateGatewayUrl = (value: string) => {
   const trimmed = value.trim();
-  if (!trimmed) return "Gateway URL is required.";
+  if (!trimmed) return "请填写网关 URL。";
   try {
     const url = new URL(trimmed);
     if (url.protocol !== "ws:" && url.protocol !== "wss:") {
-      return "Gateway URL must start with ws:// or wss://.";
+      return "网关 URL 必须以 ws:// 或 wss:// 开头。";
     }
     if (!hasExplicitPort(trimmed)) {
-      return "Gateway URL must include an explicit port.";
+      return "网关 URL 必须包含明确端口。";
     }
     return null;
   } catch {
-    return "Enter a valid gateway URL including port.";
+    return "请输入包含端口的有效网关 URL。";
   }
 };
 
@@ -94,18 +94,18 @@ export async function checkGatewayConnection(params: {
 
     const response = await gatewaysStatusApiV1GatewaysStatusGet(requestParams);
     if (response.status !== 200) {
-      return { ok: false, message: "Unable to reach gateway." };
+      return { ok: false, message: "无法连接网关。" };
     }
     const data = response.data;
     if (!data.connected) {
-      return { ok: false, message: data.error ?? "Unable to reach gateway." };
+      return { ok: false, message: data.error ?? "无法连接网关。" };
     }
-    return { ok: true, message: "Gateway reachable." };
+    return { ok: true, message: "网关连接正常。" };
   } catch (error) {
     return {
       ok: false,
       message:
-        error instanceof Error ? error.message : "Unable to reach gateway.",
+        error instanceof Error ? error.message : "无法连接网关。",
     };
   }
 }

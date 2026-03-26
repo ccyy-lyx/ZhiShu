@@ -68,7 +68,7 @@ export function BoardsTable({
   columnOrder,
   disableSorting = false,
   onDelete,
-  emptyMessage = "No boards found.",
+  emptyMessage = "未找到看板。",
   emptyState,
 }: BoardsTableProps) {
   const [internalSorting, setInternalSorting] = useState<SortingState>([
@@ -99,7 +99,7 @@ export function BoardsTable({
     const baseColumns: ColumnDef<BoardRead>[] = [
       {
         accessorKey: "name",
-        header: "Board",
+        header: "看板",
         cell: ({ row }) =>
           linkifyCell({
             href: `/boards/${row.original.id}`,
@@ -113,7 +113,7 @@ export function BoardsTable({
           if (!groupId) return "";
           return groupById.get(groupId)?.name ?? groupId;
         },
-        header: "Group",
+        header: "分组",
         cell: ({ row }) => {
           const groupId = row.original.board_group_id;
           if (!groupId) {
@@ -132,7 +132,7 @@ export function BoardsTable({
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
     ];

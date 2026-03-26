@@ -50,17 +50,17 @@ describe("CustomFieldForm", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("Field key"), {
+    fireEvent.change(screen.getByLabelText("字段键"), {
       target: { value: "client_name" },
     });
-    fireEvent.change(screen.getByLabelText("Label"), {
+    fireEvent.change(screen.getByLabelText("标签"), {
       target: { value: "Client Name" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Create field" }));
 
     await waitFor(() => {
       expect(
-        screen.getByText("Select at least one board."),
+        screen.getByText("请至少选择一个看板。"),
       ).toBeInTheDocument();
     });
     expect(onSubmit).not.toHaveBeenCalled();
@@ -83,10 +83,10 @@ describe("CustomFieldForm", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("Field key"), {
+    fireEvent.change(screen.getByLabelText("字段键"), {
       target: { value: "  client_name " },
     });
-    fireEvent.change(screen.getByLabelText("Label"), {
+    fireEvent.change(screen.getByLabelText("标签"), {
       target: { value: " Client Name " },
     });
     fireEvent.click(screen.getByRole("checkbox", { name: /operations/i }));
@@ -130,7 +130,7 @@ describe("CustomFieldForm", () => {
 
     expect(screen.getByDisplayValue("client_name")).toBeDisabled();
     expect(
-      screen.getByText("Field key cannot be changed after creation."),
+      screen.getByText("字段键在创建后不可更改。"),
     ).toBeInTheDocument();
   });
 });

@@ -76,7 +76,7 @@ export function TagsTable({
     () => [
       {
         accessorKey: "name",
-        header: "Tag",
+        header: "标签",
         cell: ({ row }) => {
           const color = normalizeColor(row.original.color);
           return (
@@ -100,7 +100,7 @@ export function TagsTable({
       },
       {
         accessorKey: "color",
-        header: "Color",
+        header: "颜色",
         cell: ({ row }) => {
           const color = normalizeColor(row.original.color);
           return (
@@ -116,7 +116,7 @@ export function TagsTable({
       },
       {
         accessorKey: "task_count",
-        header: "Tasks",
+        header: "任务数",
         cell: ({ row }) => (
           <span className="text-sm font-medium text-slate-700">
             {row.original.task_count ?? 0}
@@ -125,7 +125,7 @@ export function TagsTable({
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
     ],
@@ -156,10 +156,10 @@ export function TagsTable({
           ? {
               actions: [
                 ...(onEdit
-                  ? [{ key: "edit", label: "Edit", onClick: onEdit }]
+                  ? [{ key: "edit", label: "编辑", onClick: onEdit }]
                   : []),
                 ...(onDelete
-                  ? [{ key: "delete", label: "Delete", onClick: onDelete }]
+                  ? [{ key: "delete", label: "删除", onClick: onDelete }]
                   : []),
               ],
             }

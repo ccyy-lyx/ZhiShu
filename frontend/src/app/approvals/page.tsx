@@ -75,7 +75,7 @@ function GlobalApprovalsInner() {
           );
           if (response.status !== 200) {
             throw new Error(
-              `Failed to load approvals for ${board.name} (status ${response.status}).`,
+              `无法加载 ${board.name} 的审批（状态码 ${response.status}）。`,
             );
           }
           return { boardId: board.id, approvals: response.data.items ?? [] };
@@ -89,7 +89,7 @@ function GlobalApprovalsInner() {
         if (result.status === "fulfilled") {
           approvals.push(...result.value.approvals);
         } else {
-          warnings.push(result.reason?.message ?? "Unable to load approvals.");
+          warnings.push(result.reason?.message ?? "无法加载审批数据。");
         }
       }
 
@@ -189,13 +189,13 @@ export default function GlobalApprovalsPage() {
     <DashboardShell>
       <SignedOut>
         <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl surface-panel p-10 text-center">
-          <p className="text-sm text-muted">Sign in to view approvals.</p>
+          <p className="text-sm text-muted">请先登录后查看审批。</p>
           <SignInButton
             mode="modal"
             forceRedirectUrl="/approvals"
             signUpForceRedirectUrl="/approvals"
           >
-            <Button>Sign in</Button>
+            <Button>登录</Button>
           </SignInButton>
         </div>
       </SignedOut>

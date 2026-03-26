@@ -16,7 +16,7 @@ describe("ActivityFeed", () => {
       />,
     );
 
-    expect(screen.getByText("Loading feed…")).toBeInTheDocument();
+    expect(screen.getByText("正在加载动态…")).toBeInTheDocument();
   });
 
   it("renders error state", () => {
@@ -42,7 +42,7 @@ describe("ActivityFeed", () => {
       />,
     );
 
-    expect(screen.getByText("Unable to load feed.")).toBeInTheDocument();
+    expect(screen.getByText("无法加载动态。")).toBeInTheDocument();
   });
 
   it("renders empty state", () => {
@@ -55,9 +55,9 @@ describe("ActivityFeed", () => {
       />,
     );
 
-    expect(screen.getByText("Waiting for new activity…")).toBeInTheDocument();
+    expect(screen.getByText("暂无新动态…")).toBeInTheDocument();
     expect(
-      screen.getByText("When updates happen, they will show up here."),
+      screen.getByText("有更新时会显示在这里。"),
     ).toBeInTheDocument();
   });
 

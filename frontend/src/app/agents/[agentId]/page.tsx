@@ -123,7 +123,7 @@ export default function AgentDetailPage() {
         router.push("/agents");
       },
       onError: (err) => {
-        setDeleteError(err.message || "Something went wrong.");
+        setDeleteError(err.message || "操作失败，请稍后重试。");
       },
     },
   });
@@ -149,13 +149,13 @@ export default function AgentDetailPage() {
     <DashboardShell>
       <SignedOut>
         <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl surface-panel p-10 text-center">
-          <p className="text-sm text-muted">Sign in to view agents.</p>
+          <p className="text-sm text-muted">请先登录后查看智能体。</p>
           <SignInButton
             mode="modal"
             forceRedirectUrl="/agents"
             signUpForceRedirectUrl="/agents"
           >
-            <Button>Sign in</Button>
+            <Button>登录</Button>
           </SignInButton>
         </div>
       </SignedOut>
@@ -164,7 +164,7 @@ export default function AgentDetailPage() {
         {!isAdmin ? (
           <div className="flex h-full flex-col gap-6 rounded-2xl surface-panel p-4 md:p-8">
             <div className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-6 py-5 text-sm text-muted">
-              Only organization owners and admins can access agents.
+              仅组织所有者和管理员可以访问智能体。
             </div>
           </div>
         ) : (
@@ -172,13 +172,13 @@ export default function AgentDetailPage() {
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-quiet">
-                  Agents
+                  智能体
                 </p>
                 <h1 className="text-2xl font-semibold text-strong">
-                  {agent?.name ?? "Agent"}
+                  {agent?.name ?? "智能体"}
                 </h1>
                 <p className="text-sm text-muted">
-                  Review agent health, session binding, and recent activity.
+                  查看智能体健康状态、会话绑定和最近活动。
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -186,19 +186,19 @@ export default function AgentDetailPage() {
                   variant="outline"
                   onClick={() => router.push("/agents")}
                 >
-                  Back to agents
+                  返回智能体列表
                 </Button>
                 {agent ? (
                   <Link
                     href={`/agents/${agent.id}/edit`}
                     className="inline-flex h-10 items-center justify-center rounded-xl border border-[color:var(--border)] px-4 text-sm font-semibold text-muted transition hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
                   >
-                    Edit
+                    编辑
                   </Link>
                 ) : null}
                 {agent ? (
                   <Button variant="outline" onClick={() => setDeleteOpen(true)}>
-                    Delete
+                    删除
                   </Button>
                 ) : null}
               </div>
@@ -212,7 +212,7 @@ export default function AgentDetailPage() {
 
             {isLoading ? (
               <div className="flex flex-1 items-center justify-center text-sm text-muted">
-                Loading agent details…
+                正在加载智能体详情…
               </div>
             ) : agent ? (
               <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
@@ -221,7 +221,7 @@ export default function AgentDetailPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Overview
+                          概览
                         </p>
                         <p className="mt-1 text-lg font-semibold text-strong">
                           {agent.name}
@@ -232,13 +232,13 @@ export default function AgentDetailPage() {
                     <div className="mt-4 grid gap-4 md:grid-cols-2">
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Agent ID
+                          智能体 ID
                         </p>
                         <p className="mt-1 text-sm text-muted">{agent.id}</p>
                       </div>
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Session key
+                          会话键
                         </p>
                         <p className="mt-1 text-sm text-muted">
                           {agent.openclaw_session_id ?? "—"}
@@ -246,11 +246,11 @@ export default function AgentDetailPage() {
                       </div>
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Board
+                          看板
                         </p>
                         {agent.is_gateway_main ? (
                           <p className="mt-1 text-sm text-strong">
-                            Gateway main (no board)
+                            网关主智能体（不绑定看板）
                           </p>
                         ) : linkedBoard ? (
                           <Link
@@ -265,7 +265,7 @@ export default function AgentDetailPage() {
                       </div>
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Last seen
+                          最近在线
                         </p>
                         <p className="mt-1 text-sm text-strong">
                           {formatRelative(agent.last_seen_at)}
@@ -276,7 +276,7 @@ export default function AgentDetailPage() {
                       </div>
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Updated
+                          更新时间
                         </p>
                         <p className="mt-1 text-sm text-muted">
                           {formatTimestamp(agent.updated_at)}
@@ -284,7 +284,7 @@ export default function AgentDetailPage() {
                       </div>
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                          Created
+                          创建时间
                         </p>
                         <p className="mt-1 text-sm text-muted">
                           {formatTimestamp(agent.created_at)}
@@ -296,23 +296,23 @@ export default function AgentDetailPage() {
                   <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                        Health
+                        健康状态
                       </p>
                       <StatusPill status={agentStatus} />
                     </div>
                     <div className="mt-4 grid gap-3 text-sm text-muted">
                       <div className="flex items-center justify-between">
-                        <span>Heartbeat window</span>
+                        <span>心跳窗口</span>
                         <span>{formatRelative(agent.last_seen_at)}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span>Session binding</span>
+                        <span>会话绑定</span>
                         <span>
-                          {agent.openclaw_session_id ? "Bound" : "Unbound"}
+                          {agent.openclaw_session_id ? "已绑定" : "未绑定"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span>Status</span>
+                        <span>状态</span>
                         <span className="text-strong">{agentStatus}</span>
                       </div>
                     </div>
@@ -322,16 +322,16 @@ export default function AgentDetailPage() {
                 <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-muted)] p-5">
                   <div className="mb-4 flex items-center justify-between">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-quiet">
-                      Activity
+                      活动
                     </p>
                     <p className="text-xs text-quiet">
-                      {agentEvents.length} events
+                      {agentEvents.length} 条事件
                     </p>
                   </div>
                   <div className="space-y-3">
                     {agentEvents.length === 0 ? (
                       <div className="rounded-lg border border-dashed border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm text-muted">
-                        No activity yet for this agent.
+                        这个智能体暂时还没有活动记录。
                       </div>
                     ) : (
                       agentEvents.map((event) => (
@@ -362,7 +362,7 @@ export default function AgentDetailPage() {
               </div>
             ) : (
               <div className="flex flex-1 items-center justify-center text-sm text-muted">
-                Agent not found.
+                未找到该智能体。
               </div>
             )}
           </div>
@@ -370,11 +370,11 @@ export default function AgentDetailPage() {
       </SignedIn>
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent aria-label="Delete agent">
+        <DialogContent aria-label="删除智能体">
           <DialogHeader>
-            <DialogTitle>Delete agent</DialogTitle>
+            <DialogTitle>删除智能体</DialogTitle>
             <DialogDescription>
-              This will remove {agent?.name}. This action cannot be undone.
+              这将删除 {agent?.name}。此操作不可撤销。
             </DialogDescription>
           </DialogHeader>
           {deleteError ? (
@@ -384,10 +384,10 @@ export default function AgentDetailPage() {
           ) : null}
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteOpen(false)}>
-              Cancel
+              取消
             </Button>
             <Button onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? "Deleting…" : "Delete"}
+              {isDeleting ? "删除中…" : "删除"}
             </Button>
           </DialogFooter>
         </DialogContent>

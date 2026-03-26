@@ -51,13 +51,13 @@ describe("parseCustomFieldDefaultValue", () => {
 
   it("returns validation errors for invalid defaults", () => {
     expect(parseCustomFieldDefaultValue("integer", "42.5").error).toMatch(
-      /valid integer/i,
+      /有效整数/,
     );
     expect(parseCustomFieldDefaultValue("boolean", "yes").error).toMatch(
-      /true or false/i,
+      /true 或 false/,
     );
     expect(parseCustomFieldDefaultValue("json", '"string"').error).toMatch(
-      /object or array/i,
+      /对象或数组/,
     );
   });
 });
@@ -74,7 +74,7 @@ describe("normalizeCustomFieldFormInput", () => {
     });
 
     expect(result.value).toBeNull();
-    expect(result.error).toBe("Field key is required.");
+    expect(result.error).toBe("字段键不能为空。");
   });
 
   it("normalizes and trims valid create input", () => {

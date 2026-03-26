@@ -77,12 +77,12 @@ export function TagForm({
     event.preventDefault();
     const normalizedName = name.trim();
     if (!normalizedName) {
-      setErrorMessage("Tag name is required.");
+      setErrorMessage("标签名称不能为空。");
       return;
     }
     const normalizedSlug = slugify(slug.trim() || normalizedName);
     if (!normalizedSlug) {
-      setErrorMessage("Tag slug is required.");
+      setErrorMessage("标签标识不能为空。");
       return;
     }
     setErrorMessage(null);
@@ -94,7 +94,7 @@ export function TagForm({
         description: description.trim() || null,
       });
     } catch (error) {
-      setErrorMessage(extractErrorMessage(error, "Unable to save tag."));
+      setErrorMessage(extractErrorMessage(error, "无法保存标签。"));
     }
   };
 
@@ -108,19 +108,19 @@ export function TagForm({
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Name
+                名称
               </label>
               <Input
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                placeholder="e.g. Backend"
+                placeholder="例如：后端"
                 disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Slug
+                  标识
                 </label>
                 <button
                   type="button"
@@ -128,7 +128,7 @@ export function TagForm({
                   className="text-xs font-medium text-slate-500 underline underline-offset-2 transition hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={!suggestedSlug || isSubmitting}
                 >
-                  Use from name
+                  使用名称生成
                 </button>
               </div>
               <Input
@@ -140,14 +140,14 @@ export function TagForm({
             </div>
           </div>
           <p className="mt-2 text-xs text-slate-500">
-            Leave slug blank to auto-generate from the tag name.
+            留空则会根据标签名称自动生成标识。
           </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-[1fr_auto]">
           <div className="space-y-2">
             <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Color
+              颜色
             </label>
             <div className="flex items-center rounded-lg border border-slate-200 bg-white px-3">
               <span className="text-sm font-medium text-slate-400">#</span>
@@ -162,7 +162,7 @@ export function TagForm({
           </div>
           <div className="space-y-2">
             <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Preview
+              预览
             </label>
             <div className="inline-flex h-[42px] items-center gap-2 rounded-lg border border-slate-200 bg-white px-3">
               <span
@@ -178,12 +178,12 @@ export function TagForm({
 
         <div className="space-y-2">
           <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Description
+            描述
           </label>
           <Textarea
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="Optional description"
+            placeholder="可选描述"
             className="min-h-[110px]"
             disabled={isSubmitting}
           />
@@ -203,7 +203,7 @@ export function TagForm({
           onClick={onCancel}
           disabled={isSubmitting}
         >
-          Cancel
+          取消
         </Button>
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? submittingLabel : submitLabel}

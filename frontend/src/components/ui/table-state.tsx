@@ -10,7 +10,7 @@ type TableLoadingRowProps = {
 
 export function TableLoadingRow({
   colSpan,
-  label = "Loading…",
+  label = "加载中…",
 }: TableLoadingRowProps) {
   return (
     <tr>

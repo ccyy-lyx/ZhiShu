@@ -52,8 +52,8 @@ type DataTableProps<TData> = {
 export function DataTable<TData>({
   table,
   isLoading = false,
-  loadingLabel = "Loading…",
-  emptyMessage = "No rows found.",
+  loadingLabel = "加载中…",
+  emptyMessage = "暂无数据。",
   emptyState,
   rowActions,
   stickyHeader = false,
@@ -70,14 +70,14 @@ export function DataTable<TData>({
         rowActions.getEditHref
           ? ({
               key: "edit",
-              label: "Edit",
+              label: "编辑",
               href: rowActions.getEditHref,
             } as DataTableRowAction<TData>)
           : null,
         rowActions.onDelete
           ? ({
               key: "delete",
-              label: "Delete",
+              label: "删除",
               onClick: rowActions.onDelete,
             } as DataTableRowAction<TData>)
           : null,

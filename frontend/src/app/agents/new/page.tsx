@@ -87,7 +87,7 @@ export default function NewAgentPage() {
         }
       },
       onError: (err) => {
-        setError(err.message || "Something went wrong.");
+        setError(err.message || "操作失败，请稍后重试。");
       },
     },
   });
@@ -103,12 +103,12 @@ export default function NewAgentPage() {
     if (!isSignedIn) return;
     const trimmed = name.trim();
     if (!trimmed) {
-      setError("Agent name is required.");
+      setError("智能体名称不能为空。");
       return;
     }
     const resolvedBoardId = displayBoardId;
     if (!resolvedBoardId) {
-      setError("Select a board before creating an agent.");
+      setError("创建智能体前请先选择看板。");
       return;
     }
     setError(null);
@@ -131,14 +131,14 @@ export default function NewAgentPage() {
   return (
     <DashboardPageLayout
       signedOut={{
-        message: "Sign in to create an agent.",
+        message: "请先登录后创建智能体。",
         forceRedirectUrl: "/agents/new",
         signUpForceRedirectUrl: "/agents/new",
       }}
-      title="Create agent"
-      description="Agents start in provisioning until they check in."
+      title="创建智能体"
+      description="智能体会先处于预备状态，直到首次心跳上报。"
       isAdmin={isAdmin}
-      adminOnlyMessage="Only organization owners and admins can create agents."
+      adminOnlyMessage="仅组织所有者和管理员可以创建智能体。"
     >
       <form
         onSubmit={handleSubmit}
@@ -146,24 +146,24 @@ export default function NewAgentPage() {
       >
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Basic configuration
+            基础配置
           </p>
           <div className="mt-4 space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Agent name <span className="text-red-500">*</span>
+                  智能体名称 <span className="text-red-500">*</span>
                 </label>
                 <Input
                   value={name}
                   onChange={(event) => setName(event.target.value)}
-                  placeholder="e.g. Deploy bot"
+                  placeholder="例如：部署助手"
                   disabled={isLoading}
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Role
+                  职责
                 </label>
                 <Input
                   value={identityProfile.role}
@@ -173,7 +173,7 @@ export default function NewAgentPage() {
                       role: event.target.value,
                     }))
                   }
-                  placeholder="e.g. Founder, Social Media Manager"
+                  placeholder="例如：创始人、社媒运营"
                   disabled={isLoading}
                 />
               </div>
@@ -181,16 +181,16 @@ export default function NewAgentPage() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Board <span className="text-red-500">*</span>
+                  看板 <span className="text-red-500">*</span>
                 </label>
                 <SearchableSelect
-                  ariaLabel="Select board"
+                  ariaLabel="选择看板"
                   value={displayBoardId}
                   onValueChange={setBoardId}
                   options={getBoardOptions(boards)}
-                  placeholder="Select board"
-                  searchPlaceholder="Search boards..."
-                  emptyMessage="No matching boards."
+                  placeholder="选择看板"
+                  searchPlaceholder="搜索看板..."
+                  emptyMessage="没有匹配的看板。"
                   triggerClassName="w-full h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   contentClassName="rounded-xl border border-slate-200 shadow-lg"
                   itemClassName="px-4 py-3 text-sm text-slate-700 data-[selected=true]:bg-slate-50 data-[selected=true]:text-slate-900"
@@ -198,13 +198,13 @@ export default function NewAgentPage() {
                 />
                 {boards.length === 0 ? (
                   <p className="text-xs text-slate-500">
-                    Create a board before adding agents.
+                    请先创建看板，再为智能体分配看板。
                   </p>
                 ) : null}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-900">
-                  Emoji
+                  表情
                 </label>
                 <Select
                   value={identityProfile.emoji}
@@ -217,7 +217,7 @@ export default function NewAgentPage() {
                   disabled={isLoading}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select emoji" />
+                    <SelectValue placeholder="选择表情" />
                   </SelectTrigger>
                   <SelectContent>
                     {AGENT_EMOJI_OPTIONS.map((option) => (
@@ -234,12 +234,12 @@ export default function NewAgentPage() {
 
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Personality & behavior
+            个性与行为
           </p>
           <div className="mt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900">
-                Communication style
+                沟通风格
               </label>
               <Input
                 value={identityProfile.communication_style}
@@ -257,21 +257,21 @@ export default function NewAgentPage() {
 
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Schedule & notifications
+            调度与通知
           </p>
           <div className="mt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-900">
-                Interval
+                间隔
               </label>
               <Input
                 value={heartbeatEvery}
                 onChange={(event) => setHeartbeatEvery(event.target.value)}
-                placeholder="e.g. 10m"
+                placeholder="例如：10m"
                 disabled={isLoading}
               />
               <p className="text-xs text-slate-500">
-                How often this agent runs HEARTBEAT.md (10m, 30m, 2h).
+                设置该智能体运行 HEARTBEAT.md 的频率（例如 10m、30m、2h）。
               </p>
             </div>
           </div>
@@ -285,14 +285,14 @@ export default function NewAgentPage() {
 
         <div className="flex flex-wrap items-center gap-3">
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating…" : "Create agent"}
+            {isLoading ? "创建中…" : "创建智能体"}
           </Button>
           <Button
             variant="outline"
             type="button"
             onClick={() => router.push("/agents")}
           >
-            Back to agents
+            返回智能体列表
           </Button>
         </div>
       </form>

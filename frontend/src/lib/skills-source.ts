@@ -68,7 +68,7 @@ export const packLabelFromUrl = (packUrl: string): string => {
     }
     return parsed.host;
   } catch {
-    return "Open pack";
+    return "打开来源包";
   }
 };
 

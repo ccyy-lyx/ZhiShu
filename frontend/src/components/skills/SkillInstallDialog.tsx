@@ -44,21 +44,21 @@ export function SkillInstallDialog({
   return (
     <Dialog open={Boolean(selectedSkill)} onOpenChange={onOpenChange}>
       <DialogContent
-        aria-label="Install skill on gateways"
+        aria-label="在网关上安装技能"
         className="max-w-xl p-6 sm:p-7"
       >
         <DialogHeader className="pb-1">
           <DialogTitle>
-            {selectedSkill ? selectedSkill.name : "Install skill"}
+            {selectedSkill ? selectedSkill.name : "安装技能"}
           </DialogTitle>
           <DialogDescription>
-            Choose one or more gateways where this skill should be installed.
+            选择一个或多个网关来安装此技能。
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-2 space-y-3.5">
           {isGatewayStatusLoading ? (
-            <p className="text-sm text-slate-500">Loading gateways...</p>
+            <p className="text-sm text-slate-500">加载网关中...</p>
           ) : (
             gateways.map((gateway) => {
               const isInstalled = gatewayInstalledById[gateway.id] === true;
@@ -83,11 +83,11 @@ export function SkillInstallDialog({
                   >
                     {isInstalled
                       ? isUpdatingGateway
-                        ? "Uninstalling..."
-                        : "Uninstall"
+                        ? "卸载中..."
+                        : "卸载"
                       : isUpdatingGateway
-                        ? "Installing..."
-                        : "Install"}
+                        ? "安装中..."
+                        : "安装"}
                   </Button>
                 </div>
               );
@@ -107,7 +107,7 @@ export function SkillInstallDialog({
             onClick={() => onOpenChange(false)}
             disabled={isMutating}
           >
-            Close
+            关闭
           </Button>
         </DialogFooter>
       </DialogContent>

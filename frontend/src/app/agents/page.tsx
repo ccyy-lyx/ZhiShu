@@ -125,21 +125,21 @@ export default function AgentsPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to view agents.",
+          message: "登录后可查看 Agent。",
           forceRedirectUrl: "/agents",
           signUpForceRedirectUrl: "/agents",
         }}
-        title="Agents"
-        description={`${agents.length} agent${agents.length === 1 ? "" : "s"} total.`}
+        title="Agent"
+        description={`共 ${agents.length} 个 Agent。`}
         headerActions={
           agents.length > 0 ? (
             <Button onClick={() => router.push("/agents/new")}>
-              New agent
+              新建 Agent
             </Button>
           ) : null
         }
         isAdmin={isAdmin}
-        adminOnlyMessage="Only organization owners and admins can access agents."
+        adminOnlyMessage="仅组织所有者和管理员可以访问 Agent。"
         stickyHeader
       >
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -153,11 +153,11 @@ export default function AgentsPage() {
             stickyHeader
             onDelete={setDeleteTarget}
             emptyState={{
-              title: "No agents yet",
+              title: "暂无 Agent",
               description:
-                "Create your first agent to start executing tasks on this board.",
+                "创建第一个 Agent，开始在此看板上执行任务。",
               actionHref: "/agents/new",
-              actionLabel: "Create your first agent",
+              actionLabel: "创建第一个 Agent",
             }}
           />
         </div>
@@ -176,11 +176,11 @@ export default function AgentsPage() {
             setDeleteTarget(null);
           }
         }}
-        ariaLabel="Delete agent"
-        title="Delete agent"
+        ariaLabel="删除 Agent"
+        title="删除 Agent"
         description={
           <>
-            This will remove {deleteTarget?.name}. This action cannot be undone.
+            将删除 {deleteTarget?.name}。此操作无法撤销。
           </>
         }
         errorMessage={deleteMutation.error?.message}

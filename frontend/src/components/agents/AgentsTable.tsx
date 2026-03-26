@@ -72,7 +72,7 @@ export function AgentsTable({
   columnOrder,
   disableSorting = false,
   stickyHeader = false,
-  emptyMessage = "No agents found.",
+  emptyMessage = "未找到智能体。",
   emptyState,
   onDelete,
 }: AgentsTableProps) {
@@ -103,7 +103,7 @@ export function AgentsTable({
     const baseColumns: ColumnDef<AgentRead>[] = [
       {
         accessorKey: "name",
-        header: "Agent",
+        header: "智能体",
         cell: ({ row }) =>
           linkifyCell({
             href: `/agents/${row.original.id}`,
@@ -113,12 +113,12 @@ export function AgentsTable({
       },
       {
         accessorKey: "status",
-        header: "Status",
+        header: "状态",
         cell: ({ row }) => pillCell(row.original.status),
       },
       {
         accessorKey: "openclaw_session_id",
-        header: "Session",
+        header: "会话",
         cell: ({ row }) => (
           <span className="text-sm text-slate-700">
             {truncate(row.original.openclaw_session_id)}
@@ -127,7 +127,7 @@ export function AgentsTable({
       },
       {
         accessorKey: "board_id",
-        header: "Board",
+        header: "看板",
         cell: ({ row }) => {
           const boardId = row.original.board_id;
           if (!boardId) {
@@ -143,13 +143,13 @@ export function AgentsTable({
       },
       {
         accessorKey: "last_seen_at",
-        header: "Last seen",
+        header: "最近在线",
         cell: ({ row }) =>
           dateCell(row.original.last_seen_at, { relative: true }),
       },
       {
         accessorKey: "updated_at",
-        header: "Updated",
+        header: "更新时间",
         cell: ({ row }) => dateCell(row.original.updated_at),
       },
     ];

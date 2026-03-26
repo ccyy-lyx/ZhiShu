@@ -220,7 +220,7 @@ function BoardAccessEditor({
         <div>
           {boards.length === 0 ? (
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
-              {emptyMessage ?? "No boards available yet."}
+              {emptyMessage ?? "暂无可用看板。"}
             </div>
           ) : (
             <div className="overflow-hidden rounded-xl border border-slate-200">
@@ -420,7 +420,7 @@ export default function OrganizationPage() {
           }
         },
         onError: (err) => {
-          setInviteError(err.message || "Unable to create invite.");
+          setInviteError(err.message || "无法创建邀请。");
         },
       },
     });
@@ -544,7 +544,7 @@ export default function OrganizationPage() {
   };
 
   const orgName =
-    orgQuery.data?.status === 200 ? orgQuery.data.data.name : "Organization";
+    orgQuery.data?.status === 200 ? orgQuery.data.data.name : "组织";
 
   const handleInviteSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -552,7 +552,7 @@ export default function OrganizationPage() {
 
     const trimmedEmail = inviteEmail.trim().toLowerCase();
     if (!trimmedEmail || !trimmedEmail.includes("@")) {
-      setInviteError("Enter a valid email address.");
+      setInviteError("请输入有效邮箱地址。");
       return;
     }
 
@@ -563,7 +563,7 @@ export default function OrganizationPage() {
       inviteScope === "custom" && inviteAccessList.length > 0;
 
     if (!hasAllAccess && !hasCustomAccess) {
-      setInviteError("Select read or write access for at least one board.");
+      setInviteError("请至少为一个看板选择读取或写入权限。");
       return;
     }
 
@@ -616,7 +616,7 @@ export default function OrganizationPage() {
       }
 
       if (typeof window !== "undefined") {
-        window.prompt("Copy invite link:", inviteUrl);
+        window.prompt("复制邀请链接：", inviteUrl);
       }
     } catch {
       setCopiedInviteId(null);
@@ -640,7 +640,7 @@ export default function OrganizationPage() {
       resolvedAccessScope === "custom" && accessList.length > 0;
 
     if (!hasAllAccess && !hasCustomAccess) {
-      setAccessError("Select read or write access for at least one board.");
+      setAccessError("请至少为一个看板选择读取或写入权限。");
       return;
     }
 
@@ -670,7 +670,7 @@ export default function OrganizationPage() {
       setAccessDialogOpen(false);
     } catch (err) {
       setAccessError(
-        err instanceof Error ? err.message : "Unable to update member access.",
+        err instanceof Error ? err.message : "无法更新成员权限。",
       );
     }
   };
@@ -695,7 +695,7 @@ export default function OrganizationPage() {
     <DashboardShell>
       <SignedOut>
         <SignedOutPanel
-          message="Sign in to manage your organization."
+          message="登录后可管理组织。"
           forceRedirectUrl="/organization"
           signUpForceRedirectUrl="/organization"
         />
