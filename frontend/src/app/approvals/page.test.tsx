@@ -77,9 +77,9 @@ describe("/approvals auth boundary", () => {
       );
 
       expect(
-        screen.getByRole("heading", { name: /local authentication/i }),
+        screen.getByRole("heading", { name: /本地认证/i }),
       ).toBeInTheDocument();
-      expect(screen.getByLabelText(/access token/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/访问 token/i)).toBeInTheDocument();
     } finally {
       process.env.NEXT_PUBLIC_AUTH_MODE = previousAuthMode;
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = previousPublishableKey;
