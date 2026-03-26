@@ -80,24 +80,24 @@ export default function TagsPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to manage tags.",
+          message: "登录后可管理标签。",
           forceRedirectUrl: "/tags",
           signUpForceRedirectUrl: "/tags",
         }}
-        title="Tags"
-        description={`${tags.length} tag${tags.length === 1 ? "" : "s"} configured.`}
+        title="标签"
+        description={`已配置 ${tags.length} 个标签。`}
         headerActions={
           isAdmin ? (
             <Link
               href="/tags/add"
               className={buttonVariants({ size: "md", variant: "primary" })}
             >
-              New tag
+              新建标签
             </Link>
           ) : null
         }
         isAdmin={isAdmin}
-        adminOnlyMessage="Only organization owners and admins can manage tags."
+        adminOnlyMessage="仅组织所有者和管理员可管理标签。"
         stickyHeader
       >
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -116,11 +116,11 @@ export default function TagsPage() {
             }
             onDelete={isAdmin ? setDeleteTarget : undefined}
             emptyState={{
-              title: "No tags yet",
+              title: "暂无标签",
               description:
-                "Create tags to classify and group tasks across your boards.",
+                "创建标签后，可在多个看板中对任务进行统一分类。",
               actionHref: isAdmin ? "/tags/add" : undefined,
-              actionLabel: isAdmin ? "Create your first tag" : undefined,
+              actionLabel: isAdmin ? "创建第一个标签" : undefined,
             }}
           />
         </div>
@@ -136,17 +136,17 @@ export default function TagsPage() {
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null);
         }}
-        ariaLabel="Delete tag"
-        title="Delete tag"
+        ariaLabel="删除标签"
+        title="删除标签"
         description={
           <>
-            This will remove <strong>{deleteTarget?.name}</strong> from all
-            tagged tasks. This action cannot be undone.
+            删除后，<strong>{deleteTarget?.name}</strong> 会从所有已标记任务中移除。
+            此操作无法撤销。
           </>
         }
         errorMessage={
           deleteMutation.error
-            ? extractErrorMessage(deleteMutation.error, "Unable to delete tag.")
+            ? extractErrorMessage(deleteMutation.error, "无法删除标签。")
             : undefined
         }
         onConfirm={handleDelete}

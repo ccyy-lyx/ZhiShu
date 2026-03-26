@@ -87,17 +87,17 @@ export default function BoardGroupsPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to view board groups.",
+          message: "登录后可查看看板分组。",
           forceRedirectUrl: "/board-groups",
         }}
-        title="Board groups"
-        description={`Group boards so agents can see related work. ${groups.length} group${groups.length === 1 ? "" : "s"} total.`}
+        title="看板分组"
+        description={`用于归类看板，方便智能体查看关联工作。共 ${groups.length} 个分组。`}
         headerActions={
           <Link
             href="/board-groups/new"
             className={buttonVariants({ size: "md", variant: "primary" })}
           >
-            Create group
+            新建分组
           </Link>
         }
         stickyHeader
@@ -112,11 +112,10 @@ export default function BoardGroupsPage() {
             stickyHeader
             onDelete={setDeleteTarget}
             emptyState={{
-              title: "No groups yet",
-              description:
-                "Create a board group to increase cross-board visibility for agents.",
+              title: "暂无分组",
+              description: "创建看板分组后，智能体可更好地协同跨看板工作。",
               actionHref: "/board-groups/new",
-              actionLabel: "Create your first group",
+              actionLabel: "创建第一个分组",
             }}
           />
         </div>
@@ -134,12 +133,11 @@ export default function BoardGroupsPage() {
             setDeleteTarget(null);
           }
         }}
-        ariaLabel="Delete board group"
-        title="Delete board group"
+        ariaLabel="删除看板分组"
+        title="删除看板分组"
         description={
           <>
-            This will remove {deleteTarget?.name}. Boards will be ungrouped.
-            This action cannot be undone.
+            这将移除 {deleteTarget?.name}。相关看板会变为未分组状态。此操作无法撤销。
           </>
         }
         errorMessage={deleteMutation.error?.message}

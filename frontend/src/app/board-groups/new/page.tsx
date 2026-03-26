@@ -61,7 +61,7 @@ export default function NewBoardGroupPage() {
   const createMutation = useCreateBoardGroupApiV1BoardGroupsPost<ApiError>({
     mutation: {
       onError: (err) => {
-        setError(err.message || "Something went wrong.");
+        setError(err.message || "操作失败，请重试。");
       },
     },
   });
@@ -74,7 +74,7 @@ export default function NewBoardGroupPage() {
     if (!isSignedIn) return;
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError("Group name is required.");
+      setError("看板分组名称不能为空。");
       return;
     }
 
@@ -88,7 +88,7 @@ export default function NewBoardGroupPage() {
         },
       });
       if (created.status !== 200) {
-        throw new Error("Unable to create group.");
+        throw new Error("无法创建分组。");
       }
 
       const groupId = created.data.id;
@@ -118,7 +118,7 @@ export default function NewBoardGroupPage() {
 
       router.push(`/board-groups/${groupId}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : "操作失败，请重试。");
     }
   };
 

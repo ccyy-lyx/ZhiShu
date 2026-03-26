@@ -81,24 +81,24 @@ export default function CustomFieldsPage() {
     <>
       <DashboardPageLayout
         signedOut={{
-          message: "Sign in to manage custom fields.",
+          message: "登录后可管理自定义字段。",
           forceRedirectUrl: "/custom-fields",
           signUpForceRedirectUrl: "/custom-fields",
         }}
-        title="Custom fields"
-        description={`${customFields.length} custom field${customFields.length === 1 ? "" : "s"} configured for this organization.`}
+        title="自定义字段"
+        description={`该组织已配置 ${customFields.length} 个自定义字段。`}
         headerActions={
           isAdmin ? (
             <Link
               href="/custom-fields/new"
               className={buttonVariants({ size: "md", variant: "primary" })}
             >
-              Add field
+              新增字段
             </Link>
           ) : null
         }
         isAdmin={isAdmin}
-        adminOnlyMessage="Only organization owners and admins can manage custom fields."
+        adminOnlyMessage="仅组织所有者和管理员可管理自定义字段。"
         stickyHeader
       >
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -113,11 +113,11 @@ export default function CustomFieldsPage() {
             }
             onDelete={isAdmin ? setDeleteTarget : undefined}
             emptyState={{
-              title: "No custom fields yet",
+              title: "暂无自定义字段",
               description:
-                "Create organization-level custom fields that appear on every task.",
+                "创建组织级自定义字段后，可在所有任务中统一使用。",
               actionHref: isAdmin ? "/custom-fields/new" : undefined,
-              actionLabel: isAdmin ? "Create your first field" : undefined,
+              actionLabel: isAdmin ? "创建第一个字段" : undefined,
             }}
           />
         </div>
@@ -135,20 +135,16 @@ export default function CustomFieldsPage() {
             setDeleteTarget(null);
           }
         }}
-        ariaLabel="Delete custom field"
-        title="Delete custom field"
+        ariaLabel="删除自定义字段"
+        title="删除自定义字段"
         description={
           <>
-            This will delete <strong>{deleteTarget?.field_key}</strong>. This
-            action cannot be undone.
+            这将删除 <strong>{deleteTarget?.field_key}</strong>。此操作无法撤销。
           </>
         }
         errorMessage={
           deleteMutation.error
-            ? extractApiErrorMessage(
-                deleteMutation.error,
-                "Unable to delete custom field.",
-              )
+            ? extractApiErrorMessage(deleteMutation.error, "无法删除自定义字段。")
             : undefined
         }
         onConfirm={handleDelete}
