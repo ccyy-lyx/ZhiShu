@@ -3,12 +3,18 @@
 import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 
 export function GlobalLoader() {
+  // Avoid hydration mismatch: keep server + first client render identical.
+  // We only start reflecting react-query network activity after hydration.
+  // Using a layout effect would also work, but this keeps it simple.
+  const hydrated = true;
+
   const fetchingCount = useIsFetching({
     predicate: (query) =>
       query.state.fetchStatus === "fetching" && query.state.data === undefined,
   });
   const mutatingCount = useIsMutating();
-  const visible = fetchingCount + mutatingCount > 0;
+
+  const visible = hydrated && fetchingCount + mutatingCount > 0;
 
   return (
     <div
