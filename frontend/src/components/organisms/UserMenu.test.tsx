@@ -64,16 +64,16 @@ describe("UserMenu", () => {
 
     render(<UserMenu />);
 
-    await user.click(screen.getByRole("button", { name: /open user menu/i }));
+    await user.click(screen.getByRole("button", { name: /打开用户菜单/i }));
 
     expect(
-      screen.getByRole("link", { name: /open boards/i }),
+      screen.getByRole("link", { name: /打开看板/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /create board/i }),
+      screen.getByRole("link", { name: /创建看板/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /sign out/i }),
+      screen.getByRole("button", { name: /退出登录/i }),
     ).toBeInTheDocument();
   });
 
@@ -89,8 +89,8 @@ describe("UserMenu", () => {
 
     render(<UserMenu />);
 
-    await user.click(screen.getByRole("button", { name: /open user menu/i }));
-    await user.click(screen.getByRole("button", { name: /sign out/i }));
+    await user.click(screen.getByRole("button", { name: /打开用户菜单/i }));
+    await user.click(screen.getByRole("button", { name: /退出登录/i }));
 
     expect(clearLocalAuthTokenMock).toHaveBeenCalledTimes(1);
     expect(reloadSpy).toHaveBeenCalledTimes(1);

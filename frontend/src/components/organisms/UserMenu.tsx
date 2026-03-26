@@ -10,7 +10,7 @@ import {
   Bot,
   Boxes,
   ChevronDown,
-  Layout仪表盘,
+  LayoutDashboard,
   LogOut,
   Plus,
   Server,
@@ -153,7 +153,7 @@ export function UserMenu({
 
           {(
             [
-              { href: "/dashboard", label: "仪表盘", icon: Layout仪表盘 },
+              { href: "/dashboard", label: "仪表盘", icon: LayoutDashboard },
               { href: "/activity", label: "动态", icon: Activity },
               { href: "/agents", label: "智能体", icon: Bot },
               { href: "/gateways", label: "网关", icon: Server },

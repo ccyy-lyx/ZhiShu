@@ -14,22 +14,22 @@ import {
   Network,
   Settings,
   Store,
-  标签,
+  Tags,
 } from "lucide-react";
 
 import { useAuth } from "@/auth/clerk";
 import { ApiError } from "@/api/mutator";
-import { use组织Membership } from "@/lib/use-organization-membership";
+import { useOrganizationMembership } from "@/lib/use-organization-membership";
 import {
   type healthzHealthzGetResponse,
   useHealthzHealthzGet,
 } from "@/api/generated/default/default";
 import { cn } from "@/lib/utils";
 
-export function 仪表盘Sidebar() {
+export function DashboardSidebar() {
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
-  const { isAdmin } = use组织Membership(isSignedIn);
+  const { isAdmin } = useOrganizationMembership(isSignedIn);
   const healthQuery = useHealthzHealthzGet<healthzHealthzGetResponse, ApiError>(
     {
       query: {
@@ -134,7 +134,7 @@ export function 仪表盘Sidebar() {
                     : "hover:bg-slate-100",
                 )}
               >
-                <标签 className="h-4 w-4" />
+                <Tags className="h-4 w-4" />
                 标签
               </Link>
               <Link
