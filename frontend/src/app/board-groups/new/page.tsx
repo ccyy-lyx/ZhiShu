@@ -143,7 +143,7 @@ export default function NewBoardGroupPage() {
             <Input
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="e.g. Release hardening"
+              placeholder="例如：版本加固"
               disabled={isCreating}
             />
           </div>
@@ -156,7 +156,7 @@ export default function NewBoardGroupPage() {
           <Textarea
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="What ties these boards together? What should agents coordinate on?"
+            placeholder="这些看板之间有什么关联？智能体需要协同处理什么？"
             className="min-h-[120px]"
             disabled={isCreating}
           />
@@ -245,9 +245,7 @@ export default function NewBoardGroupPage() {
             )}
           </div>
           <p className="text-xs text-slate-500">
-            Optional. Selected boards will be assigned to this group after
-            creation. You can change membership later in group edit or board
-            settings.
+            可选：创建后会把所选看板加入该分组。你可以在分组编辑页或看板设置中随时调整。
           </p>
         </div>
 
@@ -275,7 +273,7 @@ export default function NewBoardGroupPage() {
           >
             Boards
           </Link>{" "}
-          and pick this group.
+          里为对应看板选择此分组。
         </div>
       </form>
     </DashboardPageLayout>
