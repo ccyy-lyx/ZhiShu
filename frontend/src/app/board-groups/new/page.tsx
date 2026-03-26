@@ -128,8 +128,8 @@ export default function NewBoardGroupPage() {
         message: "Sign in to create a board group.",
         forceRedirectUrl: "/board-groups/new",
       }}
-      title="Create board group"
-      description="Groups help agents discover related work across boards."
+      title="创建看板分组"
+      description="看板分组可以帮助智能体在多个看板之间发现并协同处理相关工作。"
     >
       <form
         onSubmit={handleSubmit}
@@ -138,7 +138,7 @@ export default function NewBoardGroupPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <div className="space-y-2">
             <label className="text-sm font-medium text-slate-900">
-              Group name <span className="text-red-500">*</span>
+              分组名称 <span className="text-red-500">*</span>
             </label>
             <Input
               value={name}
@@ -172,13 +172,13 @@ export default function NewBoardGroupPage() {
           <Input
             value={boardSearch}
             onChange={(event) => setBoardSearch(event.target.value)}
-            placeholder="Search boards..."
+            placeholder="搜索看板…"
             disabled={isCreating}
           />
           <div className="max-h-64 overflow-auto rounded-xl border border-slate-200 bg-slate-50/40">
             {boardsQuery.isLoading ? (
               <div className="px-4 py-6 text-sm text-slate-500">
-                Loading boards…
+                看板加载中…
               </div>
             ) : boardsQuery.error ? (
               <div className="px-4 py-6 text-sm text-rose-700">
@@ -186,7 +186,7 @@ export default function NewBoardGroupPage() {
               </div>
             ) : boards.length === 0 ? (
               <div className="px-4 py-6 text-sm text-slate-500">
-                No boards found.
+                未找到看板。
               </div>
             ) : (
               <ul className="divide-y divide-slate-200">
@@ -263,12 +263,12 @@ export default function NewBoardGroupPage() {
             Cancel
           </Button>
           <Button type="submit" disabled={isCreating || !isFormReady}>
-            {isCreating ? "Creating…" : "Create group"}
+            {isCreating ? "创建中…" : "创建分组"}
           </Button>
         </div>
 
         <div className="border-t border-slate-100 pt-4 text-xs text-slate-500">
-          Want to assign boards later? Update each board in{" "}
+          想以后再分配看板？请到{" "}
           <Link
             href="/boards"
             className="font-medium text-blue-600 hover:text-blue-700"
